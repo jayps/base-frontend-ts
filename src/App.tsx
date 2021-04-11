@@ -10,6 +10,8 @@ import About from "./pages/about/About";
 import Login from "./pages/login/Login";
 import {useAppDispatch, useAppSelector} from "./app/hooks";
 import {selectAuth, setToken} from "./features/auth/authSlice";
+import Dashboard from "./pages/dashboard/Dashboard";
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
     const auth = useAppSelector(selectAuth);
@@ -24,15 +26,12 @@ function App() {
         <Router>
             <div>
                 <Switch>
-                    <Route path="/login">
-                        <Login/>
-                    </Route>
-                    <Route path="/about">
-                        <About/>
-                    </Route>
-                    <Route path="/">
-                        <Home/>
-                    </Route>
+                    <ProtectedRoute path="/dashboard" prevent={!token} redirect={"/"}
+                                    component={Dashboard}/>
+                    <ProtectedRoute path="/login" prevent={token !== undefined && token !== null} redirect={"/dashboard"}
+                                    component={Login}/>
+                    <ProtectedRoute path="/about" prevent={false} component={About}/>
+                    <ProtectedRoute path="/" prevent={false} component={Home}/>
                 </Switch>
             </div>
         </Router>

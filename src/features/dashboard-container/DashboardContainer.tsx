@@ -3,27 +3,21 @@ import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {logout, selectAuth} from "../auth/authSlice";
 
-export interface DashboardContainerProps {
+export interface PageContainerProps {
     children: any;
 }
 
-const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
+const PageContainer: React.FC<PageContainerProps> = ({children}) => {
     const auth = useAppSelector(selectAuth);
     const dispatch = useAppDispatch();
 
     return (
         <div>
-            PAGE
+            DASH
             <nav>
                 <ul>
                     <li>
                         <Link to="/">Home</Link>
-                    </li>
-                    <li>
-                        <Link to="/about">About</Link>
-                    </li>
-                    <li>
-                        <Link to="/login">Login</Link>
                     </li>
                     {
                         auth.token && <button onClick={() => dispatch(logout())}>Logout</button>
@@ -35,4 +29,4 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
     )
 }
 
-export default DashboardContainer;
+export default PageContainer;

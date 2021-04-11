@@ -55,8 +55,10 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(loginAsync.pending, (state) => {
+                localStorage.removeItem('token');
                 state.loggingIn = true;
                 state.loginError = null;
+                state.token = null;
             })
             .addCase(loginAsync.fulfilled, (state, action) => {
                 state.loggingIn = false;
