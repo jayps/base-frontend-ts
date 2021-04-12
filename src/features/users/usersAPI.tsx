@@ -1,10 +1,14 @@
 import {API_URL} from "../../constants";
 import {AuthToken} from "../../models/Auth";
+import {UsersFilters} from "./usersSlice";
 
-export async function getUsersList() {
+export async function getUsersList(page?: number, filters?: UsersFilters, search?: string, sorting?: string) {
     const token: AuthToken = JSON.parse(localStorage.getItem('token') || '');
 
-    const response = await fetch(`${API_URL}/users/`, {
+    let url = `${API_URL}/users/`;
+    // TODO: Add params to URL.
+
+    const response = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

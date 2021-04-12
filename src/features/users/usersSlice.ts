@@ -3,16 +3,27 @@ import {RootState} from '../../app/store';
 import {User} from "../../models/User";
 import {getUsersList} from "./usersAPI";
 
+export interface UsersFilters {
+    isActive?: boolean | null;
+    isStaff?: boolean | null;
+    isSuperuser?: boolean | null;
+}
+
 export interface UsersState {
     loading: boolean;
     error?: any | null;
-    users: User[]
+    users: User[];
+    currentPage: number;
+    filters?: UsersFilters;
+    search?: string | null;
+    sorting?: string;
 }
 
 const initialState: UsersState = {
     loading: false,
     error: null,
-    users: []
+    users: [],
+    currentPage: 1
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
