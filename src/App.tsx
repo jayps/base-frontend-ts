@@ -3,7 +3,6 @@ import './App.css';
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
 } from 'react-router-dom';
 import Home from "./pages/home/Home";
 import About from "./pages/about/About";
@@ -12,6 +11,7 @@ import {useAppDispatch, useAppSelector} from "./app/hooks";
 import {selectAuth, setToken} from "./features/auth/authSlice";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
+import UsersList from './pages/users/Index';
 
 function App() {
     const auth = useAppSelector(selectAuth);
@@ -28,6 +28,8 @@ function App() {
                 <Switch>
                     <ProtectedRoute path="/dashboard" prevent={!token} redirect={"/"}
                                     component={Dashboard}/>
+                    <ProtectedRoute path="/users" prevent={!token} redirect={"/"}
+                                    component={UsersList}/>
                     <ProtectedRoute path="/login" prevent={token !== undefined && token !== null} redirect={"/dashboard"}
                                     component={Login}/>
                     <ProtectedRoute path="/about" prevent={false} component={About}/>
