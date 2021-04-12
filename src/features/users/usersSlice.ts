@@ -13,16 +13,20 @@ export interface UsersState {
     loading: boolean;
     error?: any | null;
     users: User[];
+    totalUsers: number;
     currentPage: number;
     filters?: UsersFilters;
     search?: string | null;
-    sorting?: string;
+    sorting?: string | null;
+    nextPage?: string | null;
+    previousPage?: string | null;
 }
 
 const initialState: UsersState = {
     loading: false,
     error: null,
     users: [],
+    totalUsers: 0,
     currentPage: 1
 };
 
@@ -61,7 +65,10 @@ export const usersSlice = createSlice({
             })
             .addCase(getUsersListAsync.fulfilled, (state, action) => {
                 state.loading = false;
-                state.users = action.payload;
+                state.users = action.payload.results;
+                state.totalUsers = action.payload.count;
+                state.nextPage = action.payload.next;
+                state.previousPage = action.payload.previous;
             })
             .addCase(getUsersListAsync.rejected, (state, action) => {
                 state.loading = false;
