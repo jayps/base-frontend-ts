@@ -1,23 +1,17 @@
 import React from "react";
-import PageContainer from "../../features/page-container/PageContainer";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import { useForm } from "react-hook-form";
 import {loginAsync, selectAuth} from "../../features/auth/authSlice";
 import {AuthRequest} from "../../models/Auth";
-import { Redirect } from "react-router-dom";
+import PageContainer from "../../components/page-container/PageContainer";
 
 const Login: React.FC = () => {
     const auth = useAppSelector(selectAuth);
     const dispatch = useAppDispatch();
     const {register, handleSubmit, formState: {errors}} = useForm();
-    const [loggedIn, setLoggedIn] = React.useState(false)
 
     const onSubmit = async ({email, password}: AuthRequest) => {
         dispatch(loginAsync({email, password}));
-    }
-
-    if (loggedIn) {
-        return <Redirect to="/dashboard"/>
     }
 
     return (

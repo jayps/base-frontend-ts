@@ -1,5 +1,5 @@
 import React from "react";
-import PageContainer from "../../features/page-container/PageContainer";
+import PageContainer from "../../components/page-container/PageContainer";
 
 const About: React.FC = () => {
     return (

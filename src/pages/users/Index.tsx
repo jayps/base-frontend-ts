@@ -1,9 +1,8 @@
 import React from "react";
-import DashboardContainer from "../../features/dashboard-container/DashboardContainer";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {selectAuth} from "../../features/auth/authSlice";
 import {getUsersListAsync, selectUsers} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
+import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
 
 const UsersList: React.FC = () => {
     const users = useAppSelector(selectUsers);
@@ -11,7 +10,7 @@ const UsersList: React.FC = () => {
 
     React.useEffect(() => {
         dispatch(getUsersListAsync());
-    }, []);
+    }, [dispatch]);
 
     const loader = () => {
         if (users.loading) {
@@ -36,7 +35,7 @@ const UsersList: React.FC = () => {
     }
 
     const userRow = (user: User) => {
-        return <tr>
+        return <tr key={user.id}>
             <td>{user.firstName}</td>
             <td>{user.lastName}</td>
             <td>{user.email}</td>

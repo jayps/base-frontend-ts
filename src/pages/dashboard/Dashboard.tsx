@@ -1,5 +1,5 @@
 import React from "react";
-import DashboardContainer from "../../features/dashboard-container/DashboardContainer";
+import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
 
 const Dashboard: React.FC = () => {
     return (

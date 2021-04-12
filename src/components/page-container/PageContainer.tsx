@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {logout, selectAuth} from "../auth/authSlice";
+import {logout, selectAuth} from "../../features/auth/authSlice";
 
 export interface PageContainerProps {
     children: any;
@@ -13,14 +13,17 @@ const PageContainer: React.FC<PageContainerProps> = ({children}) => {
 
     return (
         <div>
-            DASH
+            PAGE
             <nav>
                 <ul>
                     <li>
-                        <Link to="/dashboard">Home</Link>
+                        <Link to="/">Home</Link>
                     </li>
                     <li>
-                        <Link to="/users">Users</Link>
+                        <Link to="/about">About</Link>
+                    </li>
+                    <li>
+                        <Link to="/login">Login</Link>
                     </li>
                     {
                         auth.token && <button onClick={() => dispatch(logout())}>Logout</button>

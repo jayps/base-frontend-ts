@@ -1,4 +1,3 @@
-import {AuthToken} from "../../models/Auth";
 import {API_URL} from "../../constants";
 
 export async function login(email: string, password: string) {
