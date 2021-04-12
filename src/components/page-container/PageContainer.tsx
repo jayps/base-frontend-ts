@@ -39,6 +39,8 @@ const PageContainer: React.FC<PageContainerProps> = ({children}) => {
                     <Nav className="mr-auto">
                         <Nav.Link><Link to="/">Home</Link></Nav.Link>
                         <Nav.Link><Link to="/about">About</Link></Nav.Link>
+                    </Nav>
+                    <Nav>
                         <Nav.Link><Link to="/login">Login</Link></Nav.Link>
                     </Nav>
                 </Navbar.Collapse>

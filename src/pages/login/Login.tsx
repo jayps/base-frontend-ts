@@ -1,9 +1,10 @@
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {loginAsync, selectAuth} from "../../features/auth/authSlice";
 import {AuthRequest} from "../../models/Auth";
 import PageContainer from "../../components/page-container/PageContainer";
+import {Alert, Button, Card, Col, Container, Form, Row, Spinner} from "react-bootstrap";
 
 const Login: React.FC = () => {
     const auth = useAppSelector(selectAuth);
@@ -16,25 +17,68 @@ const Login: React.FC = () => {
 
     return (
         <PageContainer>
-            <h1>Login page</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input type="email" {...register("email", { required: true })} placeholder="Email" /><br />
-                {
-                    errors.email && <span>Enter a valid email address to log in.<br /></span>
-                }
-                <input type="password" {...register("password", { required: true })} placeholder="Password" /><br />
-                {
-                    errors.password && <span>Enter a valid password to log in.<br /></span>
-                }
-                <input type="submit" />
-            </form>
-            {
-                auth.loginError && (
-                    <p>
-                        We couldn't log you in with the details you provided.
-                    </p>
-                )
-            }
+            <Container>
+                <Row className="mt-5">
+                    <Col>
+                        <h1>Login</h1>
+                        <Card>
+                            <Card.Body>
+                                <Form onSubmit={handleSubmit(onSubmit)}>
+                                    <Form.Group controlId="email">
+                                        <Form.Label>Email address</Form.Label>
+                                        <Form.Control type="email"
+                                                      placeholder="Email address"
+                                                      isInvalid={errors.email}
+                                                      {...register("email", {required: true})}/>
+                                        {
+                                            errors.email &&
+                                            <Form.Control.Feedback>
+                                                Enter a valid email address to log in.
+                                            </Form.Control.Feedback>
+                                        }
+                                        <Form.Text className="text-muted">
+                                            We'll never share your email with anyone else.
+                                        </Form.Text>
+
+                                    </Form.Group>
+                                    <Form.Group controlId="password">
+                                        <Form.Label>Password</Form.Label>
+                                        <Form.Control type="Password"
+                                                      placeholder="Password"
+                                                      isInvalid={errors.password || auth.loginError}
+                                                      {...register("password", {required: true})}/>
+                                        {
+                                            errors.password &&
+                                            <Form.Text className="text-muted">
+                                                Enter a valid password to log in.
+                                            </Form.Text>
+                                        }
+                                    </Form.Group>
+                                    <Button variant="primary" type="submit" disabled={auth.loggingIn}>
+                                        {
+                                            auth.loggingIn && (
+                                                <Spinner animation="border" role="status" size="sm" className={"mr-1"}>
+                                                    <span className="sr-only">Loading...</span>
+                                                </Spinner>
+                                            )
+                                        }
+                                        {
+                                            auth.loggingIn ? 'Submitting...' : 'Submit'
+                                        }
+                                    </Button>
+                                </Form>
+                                {
+                                    auth.loginError && (
+                                        <Alert variant="danger" className="mt-3">
+                                            We couldn't log you in with the details you provided.
+                                        </Alert>
+                                    )
+                                }
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
+            </Container>
         </PageContainer>
     )
 }
