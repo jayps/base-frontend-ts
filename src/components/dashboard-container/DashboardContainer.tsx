@@ -5,6 +5,14 @@ import {logout, selectAuth} from "../../features/auth/authSlice";
 import {Button, Container, ListGroup, Nav, Navbar} from "react-bootstrap";
 import styled from "styled-components";
 
+/**
+ * If you want to make the sidebar permanent, so that it doesn't disappear:
+ * - Remove the SidebarOverlay.
+ * - Change the content width to calc(100vw-250px)
+ * - Change the content left to 250px
+ * - Change the SidebarLeft to 0 px
+ */
+
 export interface DashboardContainerProps {
     children: any;
 }
