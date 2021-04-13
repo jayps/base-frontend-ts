@@ -28,7 +28,7 @@ const Sidebar = styled.div`
   top: 0;
   left: -250px;
   height: 100vh;
-  z-index: 999;
+  z-index: 10320;
   background: #e9ecef;
   transition: all 0.3s;
 
@@ -58,7 +58,7 @@ const SidebarOverlay = styled.div`
   &.active {
     background: rgba(0, 0, 0, 0.5);
     width: 100vw;
-    z-index: 998;
+    z-index: 10310;
   }
 `;
 
@@ -108,7 +108,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
             </SidebarOverlay>
             <Content id="content">
                 {/*<button onClick={() => setSidebarActive(!sidebarActive)}>Nav bar</button>*/}
-                <Navbar bg="light" expand="lg">
+                <Navbar bg="light" expand="lg" fixed={"top"}>
                     <Nav className="mr-auto">
                         <Button
                             variant={"outline-info"}
