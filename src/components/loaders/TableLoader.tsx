@@ -10,7 +10,7 @@ const TableLoader: React.FC<TableLoaderProps> = ({rows = 4}) => {
 
         for (let i = 0; i < rows; i++) {
             output.push(
-                <div className="ph-row mb-4" style={{display: "flex", justifyContent: "center"}}>
+                <div className="ph-row mb-4" style={{display: "flex", justifyContent: "center"}} key={i}>
                     <div className="ph-col-2 big mr-4"></div>
                     <div className="ph-col-2 big mr-4"></div>
                     <div className="ph-col-2 big mr-4"></div>

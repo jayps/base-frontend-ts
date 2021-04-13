@@ -4,7 +4,7 @@ import {getUsersListAsync, selectUsers} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
 import TableLoader from "../../components/loaders/TableLoader";
-import {Table} from "react-bootstrap";
+import {Alert, Table} from "react-bootstrap";
 
 const UsersList: React.FC = () => {
     const users = useAppSelector(selectUsers);
@@ -27,9 +27,9 @@ const UsersList: React.FC = () => {
     const error = () => {
         if (!users.loading && users.error) {
             return (
-                <div>
+                <Alert variant={"danger"}>
                     {users.error}
-                </div>
+                </Alert>
             )
         }
 
@@ -48,7 +48,7 @@ const UsersList: React.FC = () => {
     }
 
     const usersList = () => {
-        if (!users.loading && users.users) {
+        if (!users.loading && !users.error && users.users) {
             return (
                 <Table striped bordered hover>
                     <thead>

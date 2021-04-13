@@ -37,11 +37,17 @@ const PageContainer: React.FC<PageContainerProps> = ({children}) => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
-                        <Nav.Link><Link to="/">Home</Link></Nav.Link>
-                        <Nav.Link><Link to="/about">About</Link></Nav.Link>
+                        <Nav.Link as={Link} to="/">Home</Nav.Link>
+                        <Nav.Link as={Link} to="/about">About</Nav.Link>
                     </Nav>
                     <Nav>
-                        <Nav.Link><Link to="/login">Login</Link></Nav.Link>
+                        {
+                            auth.token ? (
+                                <Navbar.Text>
+                                    Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <a style={{cursor: "pointer"}} onClick={() => dispatch(logout())}>Logout</a>
+                                </Navbar.Text>
+                            ) : <Nav.Link as={Link} to="/login">Login</Nav.Link>
+                        }
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>

@@ -80,6 +80,18 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
         dispatch(logout());
     }
 
+    const adminMenuItem = (link: string, title: string, display: boolean = false) => {
+        if (!display) {
+            return null;
+        }
+
+        return (
+            <ListGroup.Item action to={link} as={Link} active={location.pathname === link}>
+                {title}
+            </ListGroup.Item>
+        )
+    }
+
     return (
         <Wrapper className="admin-wrapper">
             <SidebarOverlay className={sidebarClass} onClick={() => setSidebarActive(false)}>
@@ -88,12 +100,8 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                         <h3>Admin Dashboard</h3>
                     </div>
                     <ListGroup>
-                        <ListGroup.Item action to="/dashboard" as={Link} active={location.pathname === '/dashboard'}>
-                            Home
-                        </ListGroup.Item>
-                        <ListGroup.Item action to="/users" as={Link} active={location.pathname === '/users'}>
-                            Users
-                        </ListGroup.Item>
+                        {adminMenuItem("/dashboard", "Home", true)}
+                        {adminMenuItem("/users", "Users", auth?.currentUser?.isStaff)}
                         <ListGroup.Item action>
                             Link 3
                         </ListGroup.Item>
@@ -121,7 +129,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                         </Button>
                     </Nav>
                     <Navbar.Text>
-                        Welcome, {auth?.currentUser?.firstName}. <a style={{cursor: "pointer"}} onClick={logoutUser}>Logout</a>
+                        Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <a style={{cursor: "pointer"}} onClick={logoutUser}>Logout</a>
                     </Navbar.Text>
                 </Navbar>
                 <Container fluid className={"p-3 mt-5"}>

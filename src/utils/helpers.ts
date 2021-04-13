@@ -16,5 +16,8 @@ export const getUserFromToken = (token: string): User => {
         id: decoded.user_id,
         firstName: decoded.first_name,
         lastName: decoded.last_name,
+        email: decoded.email,
+        isSuperuser: decoded.is_superuser,
+        isStaff: decoded.is_staff
     }
 }
