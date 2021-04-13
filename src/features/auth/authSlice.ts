@@ -3,6 +3,7 @@ import {RootState} from '../../app/store';
 import {User} from "../../models/User";
 import {login} from "./authAPI";
 import {AuthRequest, AuthToken} from "../../models/Auth";
+import {getUserFromToken} from "../../utils/helpers";
 
 export interface AuthState {
     loggingIn: boolean;
@@ -29,7 +30,6 @@ export const loginAsync = createAsyncThunk(
         try {
             const {data} = await login(email, password);
             localStorage.setItem('token', JSON.stringify(data));
-
             return data;
         } catch (err) {
             return thunkAPI.rejectWithValue(err);
@@ -47,7 +47,8 @@ export const authSlice = createSlice({
             state.token = null;
         },
         setToken: (state, action) => {
-            state.token = action.payload
+            state.token = action.payload;
+            state.currentUser = getUserFromToken(action.payload.access)
         }
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -63,6 +64,7 @@ export const authSlice = createSlice({
             .addCase(loginAsync.fulfilled, (state, action) => {
                 state.loggingIn = false;
                 state.token = action.payload;
+                state.currentUser = getUserFromToken(action.payload.access)
             })
             .addCase(loginAsync.rejected, (state, action) => {
                 state.loggingIn = false;

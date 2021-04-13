@@ -1,10 +1,10 @@
 export interface User {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    isStaff: boolean;
-    isSuperuser: boolean;
-    dateJoined: string;
-    isActive: boolean;
+    id?: string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    isStaff?: boolean;
+    isSuperuser?: boolean;
+    dateJoined?: string;
+    isActive?: boolean;
 }

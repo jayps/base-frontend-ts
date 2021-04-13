@@ -76,6 +76,9 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
         setContentClass(sidebarActive ? '' : 'active');
     }, [sidebarActive]);
 
+    const logoutUser = () => {
+        dispatch(logout());
+    }
 
     return (
         <Wrapper className="admin-wrapper">
@@ -118,7 +121,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                         </Button>
                     </Nav>
                     <Navbar.Text>
-                        Welcome, user
+                        Welcome, {auth?.currentUser?.firstName}. <a style={{cursor: "pointer"}} onClick={logoutUser}>Logout</a>
                     </Navbar.Text>
                 </Navbar>
                 <Container fluid className={"p-3 mt-5"}>
