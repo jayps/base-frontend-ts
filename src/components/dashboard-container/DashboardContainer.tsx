@@ -121,7 +121,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                         Welcome, user
                     </Navbar.Text>
                 </Navbar>
-                <Container fluid className={"p-3"}>
+                <Container fluid className={"p-3 mt-5"}>
                     {children}
                 </Container>
             </Content>

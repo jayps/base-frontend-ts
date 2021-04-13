@@ -8,6 +8,9 @@ const Dashboard: React.FC = () => {
             <div>
                 Welcome, person!
             </div>
+            <p>
+                The quick brown fox jumps over the lazy dog.
+            </p>
         </DashboardContainer>
     )
 }

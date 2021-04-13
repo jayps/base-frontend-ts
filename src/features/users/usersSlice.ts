@@ -23,7 +23,7 @@ export interface UsersState {
 }
 
 const initialState: UsersState = {
-    loading: false,
+    loading: true,
     error: null,
     users: [],
     totalUsers: 0,

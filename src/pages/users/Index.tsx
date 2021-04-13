@@ -3,6 +3,8 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {getUsersListAsync, selectUsers} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
+import TableLoader from "../../components/loaders/TableLoader";
+import {Table} from "react-bootstrap";
 
 const UsersList: React.FC = () => {
     const users = useAppSelector(selectUsers);
@@ -15,7 +17,7 @@ const UsersList: React.FC = () => {
     const loader = () => {
         if (users.loading) {
             return (
-                <div>Loading...</div>
+                <TableLoader/>
             )
         }
 
@@ -48,7 +50,7 @@ const UsersList: React.FC = () => {
     const usersList = () => {
         if (!users.loading && users.users) {
             return (
-                <table>
+                <Table striped bordered hover>
                     <thead>
                     <tr>
                         <th>First name</th>
@@ -62,7 +64,7 @@ const UsersList: React.FC = () => {
                     <tbody>
                     {users.users.map(u => userRow(u))}
                     </tbody>
-                </table>
+                </Table>
             )
         }
 
