@@ -44,7 +44,13 @@ const PageContainer: React.FC<PageContainerProps> = ({children}) => {
                         {
                             auth.token ? (
                                 <Navbar.Text>
-                                    Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <Button variant="link" style={{cursor: "pointer"}} onClick={() => dispatch(logout())}>Logout</Button>
+                                    Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <Button
+                                    variant="link" style={{
+                                    cursor: "pointer",
+                                    padding: 0,
+                                    lineHeight: '1em',
+                                    verticalAlign: 'baseline'
+                                }} onClick={() => dispatch(logout())}>Logout</Button>
                                 </Navbar.Text>
                             ) : <Nav.Link as={Link} to="/login">Login</Nav.Link>
                         }

@@ -54,7 +54,7 @@ const SidebarOverlay = styled.div`
   height: 100vh;
   z-index: -1;
   transition: 0.3s;
-  
+
   &.active {
     background: rgba(0, 0, 0, 0.5);
     width: 100vw;
@@ -129,7 +129,14 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                         </Button>
                     </Nav>
                     <Navbar.Text>
-                        Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <Button variant="link" style={{cursor: "pointer"}} onClick={logoutUser}>Logout</Button>
+                        Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <Button variant="link"
+                                                                                                     style={{
+                                                                                                         cursor: "pointer",
+                                                                                                         padding: 0,
+                                                                                                         lineHeight: '1em',
+                                                                                                         verticalAlign: 'baseline'
+                                                                                                     }}
+                                                                                                     onClick={logoutUser}>Logout</Button>
                     </Navbar.Text>
                 </Navbar>
                 <Container fluid className={"p-3 mt-5"}>
