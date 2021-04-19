@@ -57,10 +57,11 @@ const ManageUserPage: React.FC = () => {
             }
         ],
         onSubmit: onSubmit,
-        loading: users.saving,
+        saving: users.saving,
+        loading: users.loading,
         submitButtonText: {
             idle: 'Submit',
-            loading: 'Submitting...'
+            saving: 'Submitting...'
         },
         initialData: users.currentUser
     };

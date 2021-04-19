@@ -1,6 +1,7 @@
 import {SubmitHandler, useForm} from "react-hook-form";
 import {Button, Form, Spinner} from "react-bootstrap";
 import React from "react";
+import FormLoader from "../loaders/FormLoader";
 
 export interface DataFormFieldValidation {
     required?: boolean
@@ -19,13 +20,14 @@ export interface DataFormField {
 
 export interface DataFormSubmitButtonText {
     idle: string,
-    loading: string
+    saving: string
 }
 
 export interface DataFormProps {
     fields: DataFormField[],
     onSubmit: SubmitHandler<any>,
     submitButtonText?: DataFormSubmitButtonText,
+    saving?: boolean,
     loading?: boolean,
     initialData?: any
 }
@@ -83,7 +85,7 @@ const renderField = (field: DataFormField, register: Function, errors: any) => {
     return FIELD_RENDERERS[rendererTypes[field.type]](field, register, errors);
 }
 
-const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, loading, initialData}) => {
+const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, loading, saving, initialData}) => {
     const {register, handleSubmit, formState: {errors}, setValue} = useForm();
     console.log(errors);
 
@@ -96,7 +98,13 @@ const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, 
     }, [initialData])
 
     const getLoadingText = () => {
-        return submitButtonText?.loading || 'Loading...';
+        return submitButtonText?.saving || 'Loading...';
+    }
+
+    if (loading) {
+        return (
+            <FormLoader />
+        )
     }
 
     return (
@@ -104,16 +112,16 @@ const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, 
             {
                 fields.map(field => renderField(field, register, errors))
             }
-            <Button variant="primary" type="submit" disabled={loading}>
+            <Button variant="primary" type="submit" disabled={saving}>
                 {
-                    loading && (
+                    saving && (
                         <Spinner animation="border" role="status" size="sm" className={"mr-1"}>
                             <span className="sr-only">Loading...</span>
                         </Spinner>
                     )
                 }
                 {
-                    loading ? getLoadingText() : 'Submit'
+                    saving ? getLoadingText() : 'Submit'
                 }
             </Button>
         </Form>

@@ -20,7 +20,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) =
             <thead>
             <tr>
                 {
-                    columns.map(c => <th>{c.title}</th>)
+                    columns.map(c => <th key={c.key}>{c.title}</th>)
                 }
             </tr>
             </thead>
@@ -50,14 +50,14 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) =
         return (
             <tbody>
             {
-                data.map((datum: any) => (
-                        <tr>
+                data.map((datum: any, index: number) => (
+                        <tr key={index}>
                             {
                                 columns.map(c => {
                                     if (c.formatter) {
-                                        return <td>{c.formatter(datum)}</td>
+                                        return <td key={c.key}>{c.formatter(datum)}</td>
                                     }
-                                    return <td>{processCell(datum[c.key])}</td>
+                                    return <td key={c.key}>{processCell(datum[c.key])}</td>
                                 })
                             }
                         </tr>

@@ -39,7 +39,7 @@ const Login: React.FC = () => {
         onSubmit: onSubmit,
         submitButtonText: {
             idle: 'Login',
-            loading: 'Logging in...'
+            saving: 'Logging in...'
         },
         loading: auth.loggingIn
     };
