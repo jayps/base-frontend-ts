@@ -3,17 +3,20 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {getUsersListAsync, selectUsers} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
-import TableLoader from "../../components/loaders/TableLoader";
-import {Alert, Button, Col, Row, Table} from "react-bootstrap";
+import {Alert, Button, Col, Row} from "react-bootstrap";
 import DataTable from "../../components/data-table/DataTable";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const UsersList: React.FC = () => {
     const users = useAppSelector(selectUsers);
     const dispatch = useAppDispatch();
 
     const usersTableConfig = [
-        {title: 'First name', key: 'firstName', formatter: (user: User) => (<Link to={`/users/${user.id}/`}>{user.firstName}</Link>)},
+        {
+            title: 'First name',
+            key: 'firstName',
+            formatter: (user: User) => (<Link to={`/users/${user.id}/`}>{user.firstName}</Link>)
+        },
         {title: 'Last name', key: 'lastName'},
         {title: 'Email address', key: 'email'},
         {title: 'Is active', key: 'isActive'},
@@ -51,7 +54,7 @@ const UsersList: React.FC = () => {
             </Row>
 
             {error()}
-            <DataTable columns={usersTableConfig} data={users.users} loading={users.loading} />
+            <DataTable columns={usersTableConfig} data={users.users} loading={users.loading}/>
         </DashboardContainer>
     )
 }

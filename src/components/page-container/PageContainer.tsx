@@ -3,7 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {logout, selectAuth} from "../../features/auth/authSlice";
-import {Col, Container, Nav, Navbar, NavDropdown, Row} from "react-bootstrap";
+import {Button, Col, Container, Nav, Navbar, Row} from "react-bootstrap";
 
 export interface PageContainerProps {
     children: any;
@@ -44,7 +44,7 @@ const PageContainer: React.FC<PageContainerProps> = ({children}) => {
                         {
                             auth.token ? (
                                 <Navbar.Text>
-                                    Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <a style={{cursor: "pointer"}} onClick={() => dispatch(logout())}>Logout</a>
+                                    Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <Button variant="link" style={{cursor: "pointer"}} onClick={() => dispatch(logout())}>Logout</Button>
                                 </Navbar.Text>
                             ) : <Nav.Link as={Link} to="/login">Login</Nav.Link>
                         }

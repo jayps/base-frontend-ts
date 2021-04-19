@@ -1,16 +1,14 @@
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {useForm} from "react-hook-form";
 import {loginAsync, selectAuth} from "../../features/auth/authSlice";
 import {AuthRequest} from "../../models/Auth";
 import PageContainer from "../../components/page-container/PageContainer";
-import {Alert, Button, Card, Col, Container, Form, Row, Spinner} from "react-bootstrap";
+import {Alert, Card, Col, Container, Row} from "react-bootstrap";
 import DataForm, {DataFormProps} from "../../components/data-form/DataForm";
 
 const Login: React.FC = () => {
     const auth = useAppSelector(selectAuth);
     const dispatch = useAppDispatch();
-    const {register, handleSubmit, formState: {errors}} = useForm();
 
     const onSubmit = async ({email, password}: AuthRequest) => {
         dispatch(loginAsync({email, password}));

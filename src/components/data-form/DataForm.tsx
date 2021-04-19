@@ -87,7 +87,6 @@ const renderField = (field: DataFormField, register: Function, errors: any) => {
 
 const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, loading, saving, initialData}) => {
     const {register, handleSubmit, formState: {errors}, setValue} = useForm();
-    console.log(errors);
 
     React.useEffect(() => {
         if (initialData) {
@@ -95,7 +94,7 @@ const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, 
                 setValue(key, initialData[key]);
             });
         }
-    }, [initialData])
+    }, [initialData, setValue])
 
     const getLoadingText = () => {
         return submitButtonText?.saving || 'Loading...';

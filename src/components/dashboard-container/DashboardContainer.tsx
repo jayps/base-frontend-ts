@@ -1,4 +1,4 @@
-import {Link, useLocation} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {logout, selectAuth} from "../../features/auth/authSlice";
@@ -66,18 +66,18 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
     const auth = useAppSelector(selectAuth);
     const dispatch = useAppDispatch();
 
-    const location = useLocation()
+    const location = useLocation();
+    const history = useHistory();
     const [sidebarActive, setSidebarActive] = React.useState(false);
     const [sidebarClass, setSidebarClass] = React.useState('');
-    const [contentClass, setContentClass] = React.useState('active');
 
     React.useEffect(() => {
         setSidebarClass(sidebarActive ? 'active' : '');
-        setContentClass(sidebarActive ? '' : 'active');
     }, [sidebarActive]);
 
     const logoutUser = () => {
         dispatch(logout());
+        history.push("/")
     }
 
     const adminMenuItem = (link: string, title: string, display: boolean = false) => {
@@ -129,7 +129,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                         </Button>
                     </Nav>
                     <Navbar.Text>
-                        Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <a style={{cursor: "pointer"}} onClick={logoutUser}>Logout</a>
+                        Welcome, {auth?.currentUser?.firstName || auth?.currentUser?.email}. <Button variant="link" style={{cursor: "pointer"}} onClick={logoutUser}>Logout</Button>
                     </Navbar.Text>
                 </Navbar>
                 <Container fluid className={"p-3 mt-5"}>

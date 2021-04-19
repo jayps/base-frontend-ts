@@ -2,8 +2,6 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
 import {User} from "../../models/User";
 import {fetchUser, getUsersList, saveUser} from "./usersAPI";
-import {AuthRequest} from "../../models/Auth";
-import {login} from "../auth/authAPI";
 
 export interface UsersFilters {
     isActive?: boolean | null;

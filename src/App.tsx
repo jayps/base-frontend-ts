@@ -23,8 +23,10 @@ function App() {
         dispatch(setToken(JSON.parse(token)));
     }
 
-    const isStaff = auth.currentUser?.isStaff;
-    const isSuperuser = auth.currentUser?.isSuperuser;
+    const permissions: any = {
+        isStaff: auth.currentUser?.isStaff,
+        isSuperuser: auth.currentUser?.isSuperuser
+    };
 
     return (
         <Router>
@@ -32,11 +34,11 @@ function App() {
                 <Switch>
                     <ProtectedRoute path="/dashboard" prevent={!token} redirect={"/"}
                                     component={Dashboard}/>
-                    <ProtectedRoute path="/users/:id" prevent={!isStaff} redirect={"/dashboard"}
+                    <ProtectedRoute path="/users/:id" prevent={!permissions.isStaff} redirect={"/dashboard"}
                                     component={ManageUserPage}/>
-                    <ProtectedRoute path="/users/create" prevent={!isStaff} redirect={"/dashboard"}
+                    <ProtectedRoute path="/users/create" prevent={!permissions.isStaff} redirect={"/dashboard"}
                                     component={ManageUserPage}/>
-                    <ProtectedRoute path="/users" prevent={!isStaff} redirect={"/dashboard"}
+                    <ProtectedRoute path="/users" prevent={!permissions.isStaff} redirect={"/dashboard"}
                                     component={UsersList}/>
                     <ProtectedRoute path="/login" prevent={token !== undefined && token !== null} redirect={"/dashboard"}
                                     component={Login}/>
