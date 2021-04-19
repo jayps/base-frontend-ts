@@ -1,8 +1,29 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# React Base Frontend
+This project accompanies the API project located [here](https://github.com/jayps/base-backend-drf).  
+This project is created as a base frontend for future projects. A seed project like this makes it easy to just add new pages as you work on the API without needing to worry about the bits that you need to worry about with every project, such as authentication, user management and reduxy stuff.  
+
+The project was bootstrapped with [CRA](https://reactjs.org/docs/create-a-new-react-app.html), using the RTK Typescript template.
+
+## What's included?
+Some batteries:
+- Public pages: Home, About Us, Login, Register
+- Admin pages: Dashboard, User CRUD.
+- Styled components
+- RTK used for redux state management. It's really cool! Check it out [here](https://redux-toolkit.js.org/)
+- JWT Authentication is used for this application.
+
+## TODO
+There's still a few things to do on this app:
+- Properly handle redirects where administrative permissions are required for some routes.
+- Add functionality to add manage users.
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn install`
+
+Install project dependencies.
 
 ### `yarn start`
 
@@ -36,9 +57,3 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
