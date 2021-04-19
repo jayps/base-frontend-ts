@@ -26,7 +26,8 @@ export interface DataFormProps {
     fields: DataFormField[],
     onSubmit: SubmitHandler<any>,
     submitButtonText?: DataFormSubmitButtonText,
-    loading?: boolean
+    loading?: boolean,
+    initialData?: any
 }
 
 export const FIELD_RENDERERS: any = {
@@ -41,7 +42,7 @@ export const FIELD_RENDERERS: any = {
                 additionalProps = {}
             }: DataFormField, register: Function, errors: any) => {
         return (
-            <Form.Group controlId={name}>
+            <Form.Group controlId={name} key={name}>
                 <Form.Label>{label}</Form.Label>
                 <Form.Control type={type}
                               placeholder={placeholder ? placeholder : label}
@@ -82,9 +83,17 @@ const renderField = (field: DataFormField, register: Function, errors: any) => {
     return FIELD_RENDERERS[rendererTypes[field.type]](field, register, errors);
 }
 
-const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, loading}) => {
-    const {register, handleSubmit, formState: {errors}} = useForm();
+const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, loading, initialData}) => {
+    const {register, handleSubmit, formState: {errors}, setValue} = useForm();
     console.log(errors);
+
+    React.useEffect(() => {
+        if (initialData) {
+            Object.keys(initialData).forEach((key: any) => {
+                setValue(key, initialData[key]);
+            });
+        }
+    }, [initialData])
 
     const getLoadingText = () => {
         return submitButtonText?.loading || 'Loading...';

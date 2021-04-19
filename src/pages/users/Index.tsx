@@ -13,7 +13,7 @@ const UsersList: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const usersTableConfig = [
-        {title: 'First name', key: 'firstName'},
+        {title: 'First name', key: 'firstName', formatter: (user: User) => (<Link to={`/users/${user.id}/`}>{user.firstName}</Link>)},
         {title: 'Last name', key: 'lastName'},
         {title: 'Email address', key: 'email'},
         {title: 'Is active', key: 'isActive'},

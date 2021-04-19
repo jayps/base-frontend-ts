@@ -1,7 +1,9 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
 import {User} from "../../models/User";
-import {getUsersList} from "./usersAPI";
+import {fetchUser, getUsersList, saveUser} from "./usersAPI";
+import {AuthRequest} from "../../models/Auth";
+import {login} from "../auth/authAPI";
 
 export interface UsersFilters {
     isActive?: boolean | null;
@@ -11,6 +13,7 @@ export interface UsersFilters {
 
 export interface UsersState {
     loading: boolean;
+    saving: boolean;
     error?: any | null;
     users: User[];
     totalUsers: number;
@@ -20,14 +23,18 @@ export interface UsersState {
     sorting?: string | null;
     nextPage?: string | null;
     previousPage?: string | null;
+    currentUser?: User | null,
+    userSaved: boolean
 }
 
 const initialState: UsersState = {
     loading: true,
+    saving: false,
     error: null,
     users: [],
     totalUsers: 0,
-    currentPage: 1
+    currentPage: 1,
+    userSaved: false
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -40,6 +47,32 @@ export const getUsersListAsync = createAsyncThunk(
     async (_, thunkAPI) => {
         try {
             const {data} = await getUsersList();
+
+            return data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err);
+        }
+    }
+);
+
+export const fetchUserAsync = createAsyncThunk(
+    'users/getUser',
+    async (id: string, thunkAPI) => {
+        try {
+            const {data} = await fetchUser(id);
+
+            return data;
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err);
+        }
+    }
+);
+
+export const saveUserAsync = createAsyncThunk(
+    'users/save',
+    async (user: User, thunkAPI) => {
+        try {
+            const {data} = await saveUser(user);
 
             return data;
         } catch (err) {
@@ -62,6 +95,8 @@ export const usersSlice = createSlice({
                 state.loading = true;
                 state.error = null;
                 state.users = [];
+                state.currentUser = null;
+                state.userSaved = false;
             })
             .addCase(getUsersListAsync.fulfilled, (state, action) => {
                 state.loading = false;
@@ -73,6 +108,32 @@ export const usersSlice = createSlice({
             .addCase(getUsersListAsync.rejected, (state, action) => {
                 state.loading = false;
                 state.users = [];
+                state.error = action.payload;
+            })
+            .addCase(fetchUserAsync.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.currentUser = null;
+            })
+            .addCase(fetchUserAsync.fulfilled, (state, action) => {
+                state.loading = false;
+                state.currentUser = action.payload;
+            })
+            .addCase(fetchUserAsync.rejected, (state, action) => {
+                state.loading = false;
+                state.currentUser = null;
+                state.error = action.payload;
+            })
+            .addCase(saveUserAsync.pending, (state) => {
+                state.saving = true;
+                state.error = null;
+            })
+            .addCase(saveUserAsync.fulfilled, (state, action) => {
+                state.saving = false;
+                state.userSaved = true;
+            })
+            .addCase(saveUserAsync.rejected, (state, action) => {
+                state.saving = false;
                 state.error = action.payload;
             })
     },

@@ -12,6 +12,7 @@ import {selectAuth, setToken} from "./features/auth/authSlice";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
 import UsersList from './pages/users/Index';
+import ManageUserPage from "./pages/users/Manage";
 
 function App() {
     const auth = useAppSelector(selectAuth);
@@ -31,6 +32,10 @@ function App() {
                 <Switch>
                     <ProtectedRoute path="/dashboard" prevent={!token} redirect={"/"}
                                     component={Dashboard}/>
+                    <ProtectedRoute path="/users/:id" prevent={!isStaff} redirect={"/dashboard"}
+                                    component={ManageUserPage}/>
+                    <ProtectedRoute path="/users/create" prevent={!isStaff} redirect={"/dashboard"}
+                                    component={ManageUserPage}/>
                     <ProtectedRoute path="/users" prevent={!isStaff} redirect={"/dashboard"}
                                     component={UsersList}/>
                     <ProtectedRoute path="/login" prevent={token !== undefined && token !== null} redirect={"/dashboard"}

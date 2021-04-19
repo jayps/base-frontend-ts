@@ -4,7 +4,8 @@ import TableLoader from "../loaders/TableLoader";
 
 export interface Column {
     title: string,
-    key: string
+    key: string,
+    formatter?: Function
 }
 
 export interface DataTableProps {
@@ -52,7 +53,12 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) =
                 data.map((datum: any) => (
                         <tr>
                             {
-                                columns.map(c => <td>{processCell(datum[c.key])}</td>)
+                                columns.map(c => {
+                                    if (c.formatter) {
+                                        return <td>{c.formatter(datum)}</td>
+                                    }
+                                    return <td>{processCell(datum[c.key])}</td>
+                                })
                             }
                         </tr>
                     )
