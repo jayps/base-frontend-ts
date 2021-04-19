@@ -5,6 +5,7 @@ import {loginAsync, selectAuth} from "../../features/auth/authSlice";
 import {AuthRequest} from "../../models/Auth";
 import PageContainer from "../../components/page-container/PageContainer";
 import {Alert, Button, Card, Col, Container, Form, Row, Spinner} from "react-bootstrap";
+import DataForm, {DataFormProps} from "../../components/data-form/DataForm";
 
 const Login: React.FC = () => {
     const auth = useAppSelector(selectAuth);
@@ -15,6 +16,34 @@ const Login: React.FC = () => {
         dispatch(loginAsync({email, password}));
     }
 
+    const loginFormConfig: DataFormProps = {
+        fields: [
+            {
+                label: 'Email address',
+                name: 'email',
+                type: 'email',
+                placeholder: 'Email address',
+                validation: {required: true},
+                mutedText: 'We\'ll never share your email address.',
+                errorString: 'Enter a valid email address.'
+            },
+            {
+                label: 'Password',
+                name: 'password',
+                type: 'password',
+                placeholder: 'Password',
+                validation: {required: true},
+                errorString: 'Enter your password'
+            }
+        ],
+        onSubmit: onSubmit,
+        submitButtonText: {
+            idle: 'Login',
+            loading: 'Logging in...'
+        },
+        loading: auth.loggingIn
+    };
+
     return (
         <PageContainer>
             <Container>
@@ -23,50 +52,7 @@ const Login: React.FC = () => {
                         <h1>Login</h1>
                         <Card>
                             <Card.Body>
-                                <Form onSubmit={handleSubmit(onSubmit)}>
-                                    <Form.Group controlId="email">
-                                        <Form.Label>Email address</Form.Label>
-                                        <Form.Control type="email"
-                                                      placeholder="Email address"
-                                                      isInvalid={errors.email}
-                                                      {...register("email", {required: true})}/>
-                                        {
-                                            errors.email &&
-                                            <Form.Control.Feedback>
-                                                Enter a valid email address to log in.
-                                            </Form.Control.Feedback>
-                                        }
-                                        <Form.Text className="text-muted">
-                                            We'll never share your email with anyone else.
-                                        </Form.Text>
-
-                                    </Form.Group>
-                                    <Form.Group controlId="password">
-                                        <Form.Label>Password</Form.Label>
-                                        <Form.Control type="Password"
-                                                      placeholder="Password"
-                                                      isInvalid={errors.password || auth.loginError}
-                                                      {...register("password", {required: true})}/>
-                                        {
-                                            errors.password &&
-                                            <Form.Text className="text-muted">
-                                                Enter a valid password to log in.
-                                            </Form.Text>
-                                        }
-                                    </Form.Group>
-                                    <Button variant="primary" type="submit" disabled={auth.loggingIn}>
-                                        {
-                                            auth.loggingIn && (
-                                                <Spinner animation="border" role="status" size="sm" className={"mr-1"}>
-                                                    <span className="sr-only">Loading...</span>
-                                                </Spinner>
-                                            )
-                                        }
-                                        {
-                                            auth.loggingIn ? 'Submitting...' : 'Submit'
-                                        }
-                                    </Button>
-                                </Form>
+                                <DataForm {...loginFormConfig} />
                                 {
                                     auth.loginError && (
                                         <Alert variant="danger" className="mt-3">

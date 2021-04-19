@@ -6,6 +6,7 @@ import DashboardContainer from "../../components/dashboard-container/DashboardCo
 import TableLoader from "../../components/loaders/TableLoader";
 import {Alert, Button, Col, Row, Table} from "react-bootstrap";
 import DataTable from "../../components/data-table/DataTable";
+import { Link } from "react-router-dom";
 
 const UsersList: React.FC = () => {
     const users = useAppSelector(selectUsers);
@@ -43,7 +44,7 @@ const UsersList: React.FC = () => {
                     <h1>Users</h1>
                 </Col>
                 <Col sm={4} className={"text-right"}>
-                    <Button variant={"primary"}>
+                    <Button as={Link} to="/users/create" variant={"primary"}>
                         New user
                     </Button>
                 </Col>
