@@ -39,7 +39,7 @@ const Login: React.FC = () => {
             idle: 'Login',
             saving: 'Logging in...'
         },
-        loading: auth.loggingIn
+        saving: auth.loggingIn
     };
 
     return (
