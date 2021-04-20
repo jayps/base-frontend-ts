@@ -21,3 +21,7 @@ export const getUserFromToken = (token: string): User => {
         isStaff: decoded.is_staff
     }
 }
+
+export const makeQueryParams = (obj: any) => {
+    return Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
+}

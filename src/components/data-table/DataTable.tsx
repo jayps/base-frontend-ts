@@ -1,6 +1,8 @@
 import {Col, Row, Table} from "react-bootstrap";
 import React from "react";
 import TableLoader from "../loaders/TableLoader";
+import Pagination from "react-bootstrap-4-pagination";
+import {ROWS_PER_PAGE} from "../../constants";
 
 export interface Column {
     title: string,
@@ -11,10 +13,25 @@ export interface Column {
 export interface DataTableProps {
     columns: Column[],
     data: any[],
-    loading: boolean
+    loading: boolean,
+    rowCount: number,
+    currentPage: number,
+    onPaginate: Function
 }
 
-const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) => {
+const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false, rowCount, currentPage, onPaginate}) => {
+    const numberOfPages = Math.ceil(rowCount / ROWS_PER_PAGE);
+
+    if (loading) {
+        return (
+            <Row>
+                <Col>
+                    <TableLoader/>
+                </Col>
+            </Row>
+        )
+    }
+
     const headers = () => {
         return (
             <thead>
@@ -68,21 +85,29 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) =
         )
     }
 
-    if (loading) {
-        return (
-            <Row>
-                <Col>
-                    <TableLoader/>
-                </Col>
-            </Row>
-        )
-    }
+    // if (currentPage > numberOfPages) {
+    //     onPaginate(numberOfPages)
+    // }
 
     return (
-        <Table striped bordered hover>
-            {headers()}
-            {body()}
-        </Table>
+        <>
+            <Table striped bordered hover>
+                {headers()}
+                {body()}
+            </Table>
+            {
+                rowCount > ROWS_PER_PAGE && (
+                    <Pagination
+                        threeDots
+                        totalPages={numberOfPages}
+                        currentPage={currentPage}
+                        showMax={3}
+                        prevNext
+                        onClick={(page: number) => {onPaginate(page)}}
+                    />
+                )
+            }
+        </>
     )
 }
 

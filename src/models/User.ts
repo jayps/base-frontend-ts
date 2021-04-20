@@ -1,3 +1,5 @@
+import {UsersFilters} from "../features/users/usersSlice";
+
 export interface User {
     id?: string;
     email?: string;
@@ -7,4 +9,11 @@ export interface User {
     isSuperuser?: boolean;
     dateJoined?: string;
     isActive?: boolean;
+}
+
+export interface UserListRequest {
+    page?: number;
+    filters?: UsersFilters;
+    search?: string;
+    sorting?: string;
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {deleteUserAsync, getUsersListAsync, selectUsers} from "../../features/users/usersSlice";
+import {deleteUserAsync, getUsersListAsync, selectUsers, setCurrentPage} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
 import {Alert, Button, Col, Row} from "react-bootstrap";
@@ -27,7 +27,7 @@ const UsersList: React.FC = () => {
 
     const acknowledgeUserDeleted = () => {
         setShowUserDeleted(false);
-        dispatch(getUsersListAsync());
+        dispatch(getUsersListAsync({page: users.currentPage}));
     }
 
     const deleteUser = () => {
@@ -61,8 +61,8 @@ const UsersList: React.FC = () => {
     ];
 
     React.useEffect(() => {
-        dispatch(getUsersListAsync());
-    }, [dispatch]);
+        dispatch(getUsersListAsync({page: users.currentPage}));
+    }, [dispatch, users.currentPage]);
 
     React.useEffect(() => {
         if (users.userDeleted && !showUserDeleted) {
@@ -97,13 +97,20 @@ const UsersList: React.FC = () => {
             </Row>
 
             {error()}
-            <DataTable columns={usersTableConfig} data={users.users} loading={users.loading}/>
+            <DataTable
+                columns={usersTableConfig}
+                data={users.users}
+                loading={users.loading}
+                currentPage={users.currentPage}
+                rowCount={users.totalUsers}
+                onPaginate={(page: number) => dispatch(setCurrentPage(page))}
+            />
             <ConfirmationDialog
                 prompt={"Are you sure you want to delete this user?"}
                 yesButton={{action: deleteUser}}
                 noButton={{action: hideConfirmDeleteUser}}
-                isOpen={confirmDeleteUser} />
-            <InfoDialog text={"User deleted successfully"} onClose={acknowledgeUserDeleted} isOpen={showUserDeleted} />
+                isOpen={confirmDeleteUser}/>
+            <InfoDialog text={"User deleted successfully"} onClose={acknowledgeUserDeleted} isOpen={showUserDeleted}/>
         </DashboardContainer>
     )
 }

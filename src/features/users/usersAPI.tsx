@@ -1,10 +1,10 @@
 import {API_URL} from "../../constants";
 import {UsersFilters} from "./usersSlice";
-import {getAuthHeaders} from "../../utils/helpers";
-import {User} from "../../models/User";
+import {getAuthHeaders, makeQueryParams} from "../../utils/helpers";
+import {User, UserListRequest} from "../../models/User";
 
-export async function getUsersList(page?: number, filters?: UsersFilters, search?: string, sorting?: string) {
-    let url = `${API_URL}/users/`;
+export async function getUsersList(requestParams: UserListRequest) {
+    let url = `${API_URL}/users/?${makeQueryParams(requestParams)}`;
 
     const response = await fetch(url, {
         method: 'GET',
