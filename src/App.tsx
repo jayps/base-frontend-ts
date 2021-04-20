@@ -13,6 +13,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from './components/ProtectedRoute';
 import UsersList from './pages/users/Index';
 import ManageUserPage from "./pages/users/Manage";
+import RegisterPage from "./pages/register/RegisterPage";
 
 function App() {
     const auth = useAppSelector(selectAuth);
@@ -42,6 +43,8 @@ function App() {
                                     component={UsersList}/>
                     <ProtectedRoute path="/login" prevent={token !== undefined && token !== null} redirect={"/dashboard"}
                                     component={Login}/>
+                    <ProtectedRoute path="/register" prevent={token !== undefined && token !== null} redirect={"/dashboard"}
+                                    component={RegisterPage}/>
                     <ProtectedRoute path="/about" prevent={false} component={About}/>
                     <ProtectedRoute path="/" prevent={false} component={Home}/>
                 </Switch>
