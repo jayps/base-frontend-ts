@@ -51,3 +51,16 @@ export async function fetchUser(id: string) {
 
     return json;
 }
+
+export async function deleteUser(id: string) {
+    let url = `${API_URL}/users/${id}/`;
+
+    const response = await fetch(url, {
+        method: 'DELETE',
+        headers: getAuthHeaders()
+    });
+    if (response.status !== 204) {
+        const json = await response.json();
+        throw json.data.detail
+    }
+}

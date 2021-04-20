@@ -4,7 +4,7 @@ import TableLoader from "../loaders/TableLoader";
 
 export interface Column {
     title: string,
-    key: string,
+    key: string | null, // A null key means we'll only display the formatter.
     formatter?: Function
 }
 
@@ -20,7 +20,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) =
             <thead>
             <tr>
                 {
-                    columns.map(c => <th key={c.key}>{c.title}</th>)
+                    columns.map(c => <th key={c.title}>{c.title}</th>)
                 }
             </tr>
             </thead>
@@ -55,9 +55,9 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false}) =
                             {
                                 columns.map(c => {
                                     if (c.formatter) {
-                                        return <td key={c.key}>{c.formatter(datum)}</td>
+                                        return <td key={c.title}>{c.formatter(datum)}</td>
                                     }
-                                    return <td key={c.key}>{processCell(datum[c.key])}</td>
+                                    return <td key={c.title}>{c.key && processCell(datum[c.key])}</td>
                                 })
                             }
                         </tr>

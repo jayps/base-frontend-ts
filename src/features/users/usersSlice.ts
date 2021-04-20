@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
 import {User} from "../../models/User";
-import {fetchUser, getUsersList, saveUser} from "./usersAPI";
+import {deleteUser, fetchUser, getUsersList, saveUser} from "./usersAPI";
 
 export interface UsersFilters {
     isActive?: boolean | null;
@@ -22,7 +22,8 @@ export interface UsersState {
     nextPage?: string | null;
     previousPage?: string | null;
     currentUser?: User | null,
-    userSaved: boolean
+    userSaved: boolean,
+    userDeleted: boolean
 }
 
 const initialState: UsersState = {
@@ -32,7 +33,8 @@ const initialState: UsersState = {
     users: [],
     totalUsers: 0,
     currentPage: 1,
-    userSaved: false
+    userSaved: false,
+    userDeleted: false
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -79,6 +81,17 @@ export const saveUserAsync = createAsyncThunk(
     }
 );
 
+export const deleteUserAsync = createAsyncThunk(
+    'users/delete',
+    async (id: string, thunkAPI) => {
+        try {
+            await deleteUser(id);
+        } catch (err) {
+            return thunkAPI.rejectWithValue(err);
+        }
+    }
+);
+
 export const usersSlice = createSlice({
     name: 'users',
     initialState,
@@ -95,6 +108,7 @@ export const usersSlice = createSlice({
                 state.users = [];
                 state.currentUser = null;
                 state.userSaved = false;
+                state.userDeleted = false;
             })
             .addCase(getUsersListAsync.fulfilled, (state, action) => {
                 state.loading = false;
@@ -132,6 +146,19 @@ export const usersSlice = createSlice({
             })
             .addCase(saveUserAsync.rejected, (state, action) => {
                 state.saving = false;
+                state.error = action.payload;
+            })
+            .addCase(deleteUserAsync.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.userDeleted = false;
+            })
+            .addCase(deleteUserAsync.fulfilled, (state, action) => {
+                state.loading = false;
+                state.userDeleted = true;
+            })
+            .addCase(deleteUserAsync.rejected, (state, action) => {
+                state.loading = false;
                 state.error = action.payload;
             })
     },
