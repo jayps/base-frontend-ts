@@ -3,6 +3,8 @@ import React from "react";
 import TableLoader from "../loaders/TableLoader";
 import {ROWS_PER_PAGE} from "../../constants";
 import DataTablePagination from "./DataTablePagination";
+import DataTableHeaders from "./DataTableHeaders";
+import DataTableBody from "./DataTableBody";
 
 export interface Column {
     title: string,
@@ -32,79 +34,23 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false, ro
         )
     }
 
-    const headers = () => {
-        return (
-            <thead>
-            <tr>
-                {
-                    columns.map(c => <th key={c.title}>{c.title}</th>)
-                }
-            </tr>
-            </thead>
-        )
-    }
-
-    // Process data cells for the table. Converts things like booleans to text values.
-    const processCell = (value: any) => {
-        if (typeof value === 'boolean') {
-            return value ? 'Yes' : 'No';
-        }
-
-        return value;
-    }
-
-    const body = () => {
-        if (data.length === 0) {
-            return <tbody>
-            <tr>
-                <td colSpan={columns.length} className="text-center">
-                    No data.
-                </td>
-            </tr>
-            </tbody>
-        }
-
-        return (
-            <tbody>
-            {
-                data.map((datum: any, index: number) => (
-                        <tr key={index}>
-                            {
-                                columns.map(c => {
-                                    if (c.formatter) {
-                                        return <td key={c.title}>{c.formatter(datum)}</td>
-                                    }
-                                    return <td key={c.title}>{c.key && processCell(datum[c.key])}</td>
-                                })
-                            }
-                        </tr>
-                    )
-                )
-            }
-            </tbody>
-        )
-    }
-
-
     return (
         <>
-            <Table striped bordered hover>
-                {headers()}
-                {body()}
+            <Table striped bordered hover size="sm">
+                <DataTableHeaders columns={columns}/>
+                <DataTableBody columns={columns} data={data}/>
             </Table>
-            <Row>
-                <Col>
-                    {
-                        rowCount > ROWS_PER_PAGE && (
-                            <DataTablePagination
-                                numberOfPages={numberOfPages}
-                                currentPage={currentPage}
-                                onClick={(page: number) => {onPaginate(page)}}
-                            />
-                        )
-                    }
-                </Col>
-            </Row>
+            {
+                rowCount > ROWS_PER_PAGE && (
+                    <DataTablePagination
+                        numberOfPages={numberOfPages}
+                        currentPage={currentPage}
+                        onClick={(page: number) => {
+                            onPaginate(page)
+                        }}
+                    />
+                )
+            }
         </>
     )
 }
