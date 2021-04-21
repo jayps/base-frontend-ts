@@ -36,13 +36,14 @@ const DataTableFilters: React.FC<DataTableFiltersProps> = ({filters, onChange, c
                 <Row>
                     <Col>
                         <Form>
-                            {
-                                filters.map((filter) => (
-                                    <Row key={filter.name}>
-                                        <Col xs={12} sm={4} md={3} lg={2}>
+                            <Row>
+                                {
+                                    filters.map((filter) => (
+                                        <Col xs={12} sm={4} md={3} lg={2} key={filter.name}>
                                             <Form.Group controlId={filter.name} key={filter.name}>
                                                 <Form.Label>{filter.label}</Form.Label>
-                                                <Form.Control as="select" onChange={(e) => onChange(filter.name, e.target.value)}>
+                                                <Form.Control as="select"
+                                                              onChange={(e) => onChange(filter.name, e.target.value)}>
                                                     {
                                                         filter.options.map((option) => (
                                                             <option value={option.value}
@@ -54,9 +55,9 @@ const DataTableFilters: React.FC<DataTableFiltersProps> = ({filters, onChange, c
                                                 </Form.Control>
                                             </Form.Group>
                                         </Col>
-                                    </Row>
-                                ))
-                            }
+                                    ))
+                                }
+                            </Row>
 
                         </Form>
                     </Col>

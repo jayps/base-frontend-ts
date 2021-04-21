@@ -73,6 +73,24 @@ const UsersList: React.FC = () => {
                 {label: 'Yes', value: 'true'},
                 {label: 'No', value: 'false'},
             ]
+        },
+        {
+            name: 'is_superuser',
+            label: 'Is Superuser',
+            options: [
+                {label: 'No filter', value: ''},
+                {label: 'Yes', value: 'true'},
+                {label: 'No', value: 'false'},
+            ]
+        },
+        {
+            name: 'is_active',
+            label: 'Is Active',
+            options: [
+                {label: 'No filter', value: ''},
+                {label: 'Yes', value: 'true'},
+                {label: 'No', value: 'false'},
+            ]
         }
     ];
 
