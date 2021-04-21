@@ -1,13 +1,8 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
 import {User, UserListRequest} from "../../models/User";
 import {deleteUser, fetchUser, getUsersList, saveUser} from "./usersAPI";
-
-export interface UsersFilters {
-    isActive?: boolean | null;
-    isStaff?: boolean | null;
-    isSuperuser?: boolean | null;
-}
+import {DataTableFilterSetting} from "../../components/data-table/DataTable";
 
 export interface UsersState {
     loading: boolean;
@@ -16,7 +11,7 @@ export interface UsersState {
     users: User[];
     totalUsers: number;
     currentPage: number;
-    filters?: UsersFilters;
+    filters: DataTableFilterSetting[];
     search?: string | null;
     sorting?: string | null;
     nextPage?: string | null;
@@ -34,7 +29,8 @@ const initialState: UsersState = {
     totalUsers: 0,
     currentPage: 1,
     userSaved: false,
-    userDeleted: false
+    userDeleted: false,
+    filters: []
 };
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -99,6 +95,14 @@ export const usersSlice = createSlice({
     reducers: {
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
+        },
+        setUserFilters: (state, action: PayloadAction<DataTableFilterSetting>) => {
+            const currentFilters = state.filters.filter(f => f.name !== action.payload.name);
+            if (action.payload.value) {
+                currentFilters.push(action.payload);
+            }
+
+            state.filters = currentFilters;
         }
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -167,7 +171,7 @@ export const usersSlice = createSlice({
     },
 });
 
-export const {setCurrentPage} = usersSlice.actions;
+export const {setCurrentPage, setUserFilters} = usersSlice.actions;
 
 export const selectUsers = (state: RootState) => state.users;
 

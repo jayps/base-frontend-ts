@@ -1,5 +1,6 @@
 import {AuthToken} from "../models/Auth";
 import {User} from "../models/User";
+import {DataTableFilterSetting} from "../components/data-table/DataTable";
 
 export const getAuthHeaders = () => {
     const token: AuthToken = JSON.parse(localStorage.getItem('token') || '');
@@ -23,5 +24,16 @@ export const getUserFromToken = (token: string): User => {
 }
 
 export const makeQueryParams = (obj: any) => {
-    return Object.keys(obj).map(key => key + '=' + obj[key]).join('&');
+    let params: any = {};
+    Object.keys(obj).forEach((key) => {
+        if (Array.isArray(obj[key])) {
+            obj[key].forEach((filter: DataTableFilterSetting) => {
+                params[filter.name] = filter.value;
+            });
+        } else {
+            params[key] = obj[key];
+        }
+    });
+
+    return Object.keys(params).map(key => key + '=' + params[key]).join('&');
 }

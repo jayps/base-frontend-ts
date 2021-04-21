@@ -1,10 +1,10 @@
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {deleteUserAsync, getUsersListAsync, selectUsers, setCurrentPage} from "../../features/users/usersSlice";
+import {deleteUserAsync, getUsersListAsync, selectUsers, setCurrentPage, setUserFilters} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
 import {Alert, Button, Col, Row} from "react-bootstrap";
-import DataTable from "../../components/data-table/DataTable";
+import DataTable, {DataTableFilter, DataTableFilterSetting} from "../../components/data-table/DataTable";
 import {Link} from "react-router-dom";
 import ConfirmationDialog from "../../components/dialogs/ConfirmationDialog";
 import InfoDialog from "../../components/dialogs/InfoDialog";
@@ -27,7 +27,7 @@ const UsersList: React.FC = () => {
 
     const acknowledgeUserDeleted = () => {
         setShowUserDeleted(false);
-        dispatch(getUsersListAsync({page: users.currentPage}));
+        fetchUsers();
     }
 
     const deleteUser = () => {
@@ -36,7 +36,11 @@ const UsersList: React.FC = () => {
         }
     }
 
-    const usersTableConfig = [
+    const fetchUsers = () => {
+        dispatch(getUsersListAsync({page: users.currentPage}));
+    }
+
+    const usersTableColumns = [
         {
             title: 'First name',
             key: 'firstName',
@@ -60,9 +64,21 @@ const UsersList: React.FC = () => {
         }
     ];
 
+    const usersTableFilters: DataTableFilter[] = [
+        {
+            name: 'is_staff',
+            label: 'Is Staff',
+            options: [
+                {label: 'No filter', value: ''},
+                {label: 'Yes', value: 'true'},
+                {label: 'No', value: 'false'},
+            ]
+        }
+    ];
+
     React.useEffect(() => {
-        dispatch(getUsersListAsync({page: users.currentPage}));
-    }, [dispatch, users.currentPage]);
+        dispatch(getUsersListAsync({page: users.currentPage, filters: users.filters}));
+    }, [dispatch, users.currentPage, users.filters]);
 
     React.useEffect(() => {
         if (users.userDeleted && !showUserDeleted) {
@@ -98,12 +114,15 @@ const UsersList: React.FC = () => {
 
             {error()}
             <DataTable
-                columns={usersTableConfig}
+                columns={usersTableColumns}
                 data={users.users}
                 loading={users.loading}
                 currentPage={users.currentPage}
                 rowCount={users.totalUsers}
                 onPaginate={(page: number) => dispatch(setCurrentPage(page))}
+                filters={usersTableFilters}
+                currentFilterSettings={users.filters}
+                onFilter={(filter: DataTableFilterSetting) => dispatch(setUserFilters(filter))}
             />
             <ConfirmationDialog
                 prompt={"Are you sure you want to delete this user?"}

@@ -1,5 +1,4 @@
 import {API_URL} from "../../constants";
-import {UsersFilters} from "./usersSlice";
 import {getAuthHeaders, makeQueryParams} from "../../utils/helpers";
 import {User, UserListRequest} from "../../models/User";
 

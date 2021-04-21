@@ -1,4 +1,4 @@
-import {UsersFilters} from "../features/users/usersSlice";
+import {DataTableFilterSetting} from "../components/data-table/DataTable";
 
 export interface User {
     id?: string;
@@ -13,7 +13,7 @@ export interface User {
 
 export interface UserListRequest {
     page?: number;
-    filters?: UsersFilters;
+    filters?: DataTableFilterSetting[];
     search?: string;
     sorting?: string;
 }
