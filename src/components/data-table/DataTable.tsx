@@ -1,8 +1,8 @@
 import {Col, Row, Table} from "react-bootstrap";
 import React from "react";
 import TableLoader from "../loaders/TableLoader";
-import Pagination from "react-bootstrap-4-pagination";
 import {ROWS_PER_PAGE} from "../../constants";
+import DataTablePagination from "./DataTablePagination";
 
 export interface Column {
     title: string,
@@ -85,9 +85,6 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false, ro
         )
     }
 
-    // if (currentPage > numberOfPages) {
-    //     onPaginate(numberOfPages)
-    // }
 
     return (
         <>
@@ -95,18 +92,19 @@ const DataTable: React.FC<DataTableProps> = ({columns, data, loading = false, ro
                 {headers()}
                 {body()}
             </Table>
-            {
-                rowCount > ROWS_PER_PAGE && (
-                    <Pagination
-                        threeDots
-                        totalPages={numberOfPages}
-                        currentPage={currentPage}
-                        showMax={3}
-                        prevNext
-                        onClick={(page: number) => {onPaginate(page)}}
-                    />
-                )
-            }
+            <Row>
+                <Col>
+                    {
+                        rowCount > ROWS_PER_PAGE && (
+                            <DataTablePagination
+                                numberOfPages={numberOfPages}
+                                currentPage={currentPage}
+                                onClick={(page: number) => {onPaginate(page)}}
+                            />
+                        )
+                    }
+                </Col>
+            </Row>
         </>
     )
 }
