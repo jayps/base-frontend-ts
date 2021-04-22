@@ -1,6 +1,4 @@
 import {getAuthHeaders} from "../../utils/helpers";
-import {User} from "../../models/User";
-import {API_URL} from "../../constants";
 import {DataModel} from "../../models/DataModel";
 
 export async function fetchModel(endpoint: string, id: string) {
@@ -19,7 +17,6 @@ export async function fetchModel(endpoint: string, id: string) {
 }
 
 export async function saveModel(endpoint: string, model: DataModel) {
-    console.log('saving...', endpoint, model);
     let url = endpoint;
 
     if (model?.id) {

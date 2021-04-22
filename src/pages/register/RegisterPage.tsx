@@ -2,12 +2,9 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {registerAsync, selectRegister} from "../../features/register/registerSlice";
 import PageContainer from "../../components/page-container/PageContainer";
 import {Alert, Button, Card, Col, Container, Form, Row, Spinner} from "react-bootstrap";
-import DataForm from "../../components/data-form/DataForm";
 import React from "react";
-import {RegisterRequest} from "../../models/Auth";
 import InfoDialog from "../../components/dialogs/InfoDialog";
 import {useHistory} from "react-router-dom";
-import {API_URL} from "../../constants";
 import {useForm} from "react-hook-form";
 
 const RegisterPage: React.FC = () => {

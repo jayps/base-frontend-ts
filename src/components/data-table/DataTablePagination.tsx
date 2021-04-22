@@ -1,6 +1,5 @@
 import {Pagination} from "react-bootstrap";
 import React from "react";
-import {current} from "@reduxjs/toolkit";
 
 export interface DataTablePaginationProps {
     numberOfPages: number,

@@ -1,5 +1,4 @@
-import DataTable, {Column, DataTableActions, DataTableFilter} from "../../components/data-table/DataTable";
-import {User} from "../../models/User";
+import DataTable, {Column, DataTableActions} from "../../components/data-table/DataTable";
 import {Link} from "react-router-dom";
 import {API_URL} from "../../constants";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
@@ -16,8 +15,6 @@ const GroupsPage: React.FC = () => {
             isSortable: true
         },
     ];
-
-    const groupTableFilters: DataTableFilter[] = [];
 
     const groupTableActions: DataTableActions = {
         delete: {

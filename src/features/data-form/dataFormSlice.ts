@@ -2,7 +2,6 @@ import {DataModel} from "../../models/DataModel";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {fetchModel, saveModel} from "./dataFormAPI";
 import {RootState} from "../../app/store";
-import {usersSlice} from "../users/usersSlice";
 import {getTableDataListAsync} from "../table/tableSlice";
 
 export interface DataFormState {

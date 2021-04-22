@@ -1,12 +1,9 @@
-import {SubmitHandler, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {Alert, Button, Form, Spinner} from "react-bootstrap";
 import React from "react";
 import FormLoader from "../loaders/FormLoader";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {fetchUserAsync, saveUserAsync} from "../../features/users/usersSlice";
 import {fetchModelAsync, saveModelAsync, selectDataForm} from "../../features/data-form/dataFormSlice";
-import {User} from "../../models/User";
-import {Redirect} from "react-router-dom";
 
 export interface DataFormFieldValidation {
     required?: boolean

@@ -1,11 +1,8 @@
-import {Redirect, useHistory, useParams} from "react-router-dom";
-import {User} from "../../models/User";
+import {useHistory, useParams} from "react-router-dom";
 import {Col, Row} from "react-bootstrap";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
 import React from "react";
 import DataForm from "../../components/data-form/DataForm";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {fetchUserAsync, saveUserAsync, selectUsers} from "../../features/users/usersSlice";
 import {API_URL} from "../../constants";
 
 interface ManageUserPageParams {
@@ -14,18 +11,12 @@ interface ManageUserPageParams {
 
 const ManageUserPage: React.FC = () => {
     const {id} = useParams<ManageUserPageParams>();
-    const users = useAppSelector(selectUsers);
-    const dispatch = useAppDispatch();
     const [isNewUser, setIsNewUser] = React.useState(false);
     const history = useHistory();
 
     React.useEffect(() => {
-        const isNewUser = id === 'create';
-        setIsNewUser(isNewUser);
-        if (!isNewUser && id) {
-            dispatch(fetchUserAsync(id))
-        }
-    }, [dispatch, id]);
+        setIsNewUser(id === 'create');
+    }, [id]);
 
     const userFormConfig = {
         fields: [
@@ -65,10 +56,6 @@ const ManageUserPage: React.FC = () => {
         errorMessage: 'Something went wrong while saving this user. Try again or contact support',
         id
     };
-
-    if (users.userSaved) {
-        return <Redirect to={"/users"}/>
-    }
 
     return (
         <DashboardContainer>
