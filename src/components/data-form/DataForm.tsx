@@ -1,7 +1,12 @@
 import {SubmitHandler, useForm} from "react-hook-form";
-import {Button, Form, Spinner} from "react-bootstrap";
+import {Alert, Button, Form, Spinner} from "react-bootstrap";
 import React from "react";
 import FormLoader from "../loaders/FormLoader";
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {fetchUserAsync, saveUserAsync} from "../../features/users/usersSlice";
+import {fetchModelAsync, saveModelAsync, selectDataForm} from "../../features/data-form/dataFormSlice";
+import {User} from "../../models/User";
+import {Redirect} from "react-router-dom";
 
 export interface DataFormFieldValidation {
     required?: boolean
@@ -25,11 +30,11 @@ export interface DataFormSubmitButtonText {
 
 export interface DataFormProps {
     fields: DataFormField[],
-    onSubmit: SubmitHandler<any>,
+    onSubmitted?: Function,
     submitButtonText?: DataFormSubmitButtonText,
-    saving?: boolean,
-    loading?: boolean,
-    initialData?: any
+    id?: string,
+    endpoint: string,
+    errorMessage: string
 }
 
 export const FIELD_RENDERERS: any = {
@@ -85,45 +90,80 @@ const renderField = (field: DataFormField, register: Function, errors: any) => {
     return FIELD_RENDERERS[rendererTypes[field.type]](field, register, errors);
 }
 
-const DataForm: React.FC<DataFormProps> = ({fields, onSubmit, submitButtonText, loading, saving, initialData}) => {
+const DataForm: React.FC<DataFormProps> = ({
+                                               fields,
+                                               onSubmitted,
+                                               submitButtonText,
+                                               id,
+                                               endpoint,
+                                               errorMessage
+                                           }) => {
+    const dispatch = useAppDispatch();
+    const dataFormState = useAppSelector(selectDataForm);
     const {register, handleSubmit, formState: {errors}, setValue} = useForm();
 
     React.useEffect(() => {
-        if (initialData) {
-            Object.keys(initialData).forEach((key: any) => {
-                setValue(key, initialData[key]);
-            });
+        const isNewUser = id === 'create';
+        if (!isNewUser && id) {
+            dispatch(fetchModelAsync({endpoint, id}))
         }
-    }, [initialData, setValue])
+    }, [dispatch, endpoint, id]);
+
+    React.useEffect(() => {
+        if (dataFormState.currentModel) {
+            fields.forEach((field) => {
+                const fieldName: any = field.name;
+                // @ts-ignore
+                const fieldValue: any = dataFormState.currentModel[field.name]
+                setValue(fieldName, fieldValue);
+            })
+        }
+    }, [dataFormState.currentModel, fields, setValue])
 
     const getLoadingText = () => {
         return submitButtonText?.saving || 'Loading...';
     }
 
-    if (loading) {
+    if (dataFormState.loading) {
         return (
-            <FormLoader />
+            <FormLoader/>
         )
     }
 
+    const formSubmitted = (values: any) => {
+        console.log('vals', values);
+        dispatch(saveModelAsync({endpoint, model: {...dataFormState.currentModel, ...values}}));
+    }
+
+    if (dataFormState.modelSaved && onSubmitted) {
+        onSubmitted();
+    }
+
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}>
-            {
-                fields.map(field => renderField(field, register, errors))
-            }
-            <Button variant="primary" type="submit" disabled={saving}>
+        <>
+            <Form onSubmit={handleSubmit(formSubmitted)}>
                 {
-                    saving && (
-                        <Spinner animation="border" role="status" size="sm" className={"mr-1"}>
-                            <span className="sr-only">Loading...</span>
-                        </Spinner>
-                    )
+                    fields.map(field => renderField(field, register, errors))
                 }
-                {
-                    saving ? getLoadingText() : 'Submit'
-                }
-            </Button>
-        </Form>
+                <Button variant="primary" type="submit" disabled={dataFormState.saving}>
+                    {
+                        dataFormState.saving && (
+                            <Spinner animation="border" role="status" size="sm" className={"mr-1"}>
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>
+                        )
+                    }
+                    {
+                        dataFormState.saving ? getLoadingText() : 'Submit'
+                    }
+                </Button>
+            </Form>
+            {dataFormState.error && (
+                <Alert variant="danger" className="mt-3">
+                    {errorMessage}
+                </Alert>
+            )}
+        </>
     );
 }
 

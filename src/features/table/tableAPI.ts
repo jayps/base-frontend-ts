@@ -1,6 +1,5 @@
 import {getAuthHeaders, makeQueryParams} from "../../utils/helpers";
 import {DataModelRequest} from "../../models/Request";
-import {API_URL} from "../../constants";
 
 export async function getTableDataList(requestParams: DataModelRequest) {
     let url = `${requestParams.endpoint}?${makeQueryParams(requestParams)}`;

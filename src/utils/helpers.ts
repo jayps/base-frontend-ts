@@ -3,12 +3,15 @@ import {User} from "../models/User";
 import {DataTableFilterSetting} from "../components/data-table/DataTable";
 
 export const getAuthHeaders = () => {
-    const token: AuthToken = JSON.parse(localStorage.getItem('token') || '');
+    const headers: any = {'Content-Type': 'application/json'}
 
-    return {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token.access}`
+    const storageToken = localStorage.getItem('token') || null;
+    if (storageToken) {
+        const token: AuthToken = JSON.parse(storageToken);
+        headers['Authorization'] = `Bearer ${token.access}`
     }
+
+    return headers;
 }
 
 export const getUserFromToken = (token: string): User => {

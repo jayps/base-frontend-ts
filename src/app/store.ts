@@ -4,6 +4,7 @@ import authReducer from '../features/auth/authSlice';
 import userReducer from '../features/users/usersSlice';
 import registerReducer from '../features/register/registerSlice';
 import tableReducer from '../features/table/tableSlice';
+import dataFormReducer from '../features/data-form/dataFormSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     auth: authReducer,
     users: userReducer,
     register: registerReducer,
-    table: tableReducer
+    table: tableReducer,
+    dataForm: dataFormReducer
   },
 });
 
