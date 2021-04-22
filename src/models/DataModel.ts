@@ -8,4 +8,5 @@ export abstract class DataModel {
      * delete
      * save
      */
+    id?: string;
 }

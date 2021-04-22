@@ -16,9 +16,6 @@ import {
 } from "../../features/table/tableSlice";
 import ConfirmationDialog from "../dialogs/ConfirmationDialog";
 import {DataModel} from "../../models/DataModel";
-import {User} from "../../models/User";
-import {deleteUserAsync} from "../../features/users/usersSlice";
-import DashboardContainer from "../dashboard-container/DashboardContainer";
 import InfoDialog from "../dialogs/InfoDialog";
 
 export interface Column {
@@ -66,7 +63,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
     const dispatch = useAppDispatch();
 
     const [confirmDeleteRecord, setConfirmDeleteRecord] = React.useState(false);
-    const [recordToDelete, setRecordToDelete] = React.useState<User | null>(null);
+    const [recordToDelete, setRecordToDelete] = React.useState<DataModel | null>(null);
     const [showRecordDeleted, setShowRecordDeleted] = React.useState<boolean>(false);
     const [numberOfPages, setNumberOfPages] = React.useState(0);
 
