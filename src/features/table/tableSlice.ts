@@ -4,8 +4,6 @@ import {DataTableFilterSetting} from "../../components/data-table/DataTable";
 import {DataModel} from "../../models/DataModel";
 import {DataModelRequest} from "../../models/Request";
 import {deleteTableDataItem, getTableDataList} from "./tableAPI";
-import {deleteUser} from "../users/usersAPI";
-import {deleteUserAsync} from "../users/usersSlice";
 
 export interface TableState {
     loading: boolean;
@@ -106,7 +104,7 @@ export const tableSlice = createSlice({
                 state.error = null;
                 state.recordDeleted = false;
             })
-            .addCase(deleteTableDataItemAsync.fulfilled, (state, action) => {
+            .addCase(deleteTableDataItemAsync.fulfilled, (state) => {
                 state.loading = false;
                 state.recordDeleted = true;
             })
