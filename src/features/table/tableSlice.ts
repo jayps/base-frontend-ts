@@ -5,6 +5,16 @@ import {DataModel} from "../../models/DataModel";
 import {DataModelRequest} from "../../models/Request";
 import {deleteTableDataItem, getTableDataList} from "./tableAPI";
 
+export interface EndpointFilters {
+    endpoint: string;
+    filters: DataTableFilterSetting[];
+}
+
+export interface EndpointFilterPayload {
+    endpoint: string;
+    filter: DataTableFilterSetting;
+}
+
 export interface TableState {
     loading: boolean;
     saving: boolean;
@@ -12,7 +22,7 @@ export interface TableState {
     records: DataModel[];
     totalRecords: number;
     currentPage: number;
-    filters: DataTableFilterSetting[];
+    filters: EndpointFilters[];
     search?: string | null;
     sorting?: string | null;
     nextPage?: string | null;
@@ -67,13 +77,19 @@ export const tableSlice = createSlice({
         setTablePage: (state, action) => {
             state.currentPage = action.payload;
         },
-        setTableFilters: (state, action: PayloadAction<DataTableFilterSetting>) => {
-            const currentFilters = state.filters.filter(f => f.name !== action.payload.name);
-            if (action.payload.value) {
-                currentFilters.push(action.payload);
+        setTableFilters: (state, action: PayloadAction<EndpointFilterPayload>) => {
+            const endpointFilters = state.filters.find(f => f.endpoint === action.payload.endpoint) || {
+                endpoint: action.payload.endpoint,
+                filters: []
+            };
+            endpointFilters.filters = endpointFilters.filters.filter(f => f.name !== action.payload.filter.name);
+            if (action.payload.filter.value) {
+                endpointFilters.filters.push(action.payload.filter);
             }
 
-            state.filters = currentFilters;
+            const existingFiltersExcludingUpdates = state.filters.filter(f => f.endpoint !== action.payload.endpoint);
+
+            state.filters = [...existingFiltersExcludingUpdates, endpointFilters];
             state.currentPage = 1;
         }
     },
@@ -116,7 +132,7 @@ export const tableSlice = createSlice({
     },
 });
 
-export const {setTablePage, setTableFilters, resetTable} = tableSlice.actions;
+export const {setTablePage, setTableFilters} = tableSlice.actions;
 
 export const selectTable = (state: RootState) => state.table;
 

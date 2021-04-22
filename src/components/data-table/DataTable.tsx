@@ -1,5 +1,5 @@
 import {Alert, Button, Col, Row, Table} from "react-bootstrap";
-import React from "react";
+import React, {useCallback} from "react";
 import TableLoader from "../loaders/TableLoader";
 import {ROWS_PER_PAGE} from "../../constants";
 import DataTablePagination from "./DataTablePagination";
@@ -8,9 +8,8 @@ import DataTableBody from "./DataTableBody";
 import DataTableFilters from "./DataTableFilters";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {
-    deleteTableDataItemAsync,
+    deleteTableDataItemAsync, EndpointFilterPayload,
     getTableDataListAsync,
-    resetTable,
     selectTable,
     setTableFilters,
     setTablePage
@@ -67,19 +66,39 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
     const [recordToDelete, setRecordToDelete] = React.useState<DataModel | null>(null);
     const [showRecordDeleted, setShowRecordDeleted] = React.useState<boolean>(false);
     const [numberOfPages, setNumberOfPages] = React.useState(0);
-    const [loaded, setLoaded] = React.useState(false);
+    const [pageLoaded, setPageLoaded] = React.useState(false);
+
+    /**
+     * Get table specific endpoint filters.
+     * We store filters in state related to whichever table we're displaying,
+     * so always make sure the currently displayed table uses the correct filters.
+     * ** useCallback just makes sure we don't call this method and change state with every render.
+     */
+    const getTableFilters = useCallback(() => {
+        const endpointFilters = tableState.filters.find(f => f.endpoint === endpoint);
+        if (endpointFilters) {
+            return endpointFilters.filters;
+        }
+
+        return [];
+    }, [endpoint, tableState.filters]);
 
     React.useEffect(() => {
-        dispatch(resetTable());
-    }, [dispatch]);
+        dispatch(setTablePage(1)); // Reset the page when we're loading up the table
+        setPageLoaded(true);
+    }, [dispatch])
 
     React.useEffect(() => {
+        if (!pageLoaded) {
+            // If the page has not been set to 1, don't load the table.
+            return;
+        }
         dispatch((getTableDataListAsync({
             endpoint: endpoint,
-            filters: tableState.filters,
+            filters: getTableFilters(),
             page: tableState.currentPage
         })))
-    }, [dispatch, endpoint, tableState.currentPage, tableState.filters]);
+    }, [dispatch, endpoint, getTableFilters, pageLoaded, tableState.currentPage, tableState.filters]);
 
     React.useEffect(() => {
         if (tableState.recordDeleted && !showRecordDeleted) {
@@ -115,7 +134,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
         setShowRecordDeleted(false);
         dispatch((getTableDataListAsync({
             endpoint: endpoint,
-            filters: tableState.filters,
+            filters: getTableFilters(),
             page: tableState.currentPage
         })));
     }
@@ -149,9 +168,13 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
 
     return (
         <>
-            <DataTableFilters filters={filters} currentFilterSettings={tableState.filters}
+            <DataTableFilters filters={filters} currentFilterSettings={getTableFilters()}
                               onChange={(name: string, value: string) => {
-                                  dispatch(setTableFilters({name, value}));
+                                  const payload: EndpointFilterPayload = {
+                                      endpoint,
+                                      filter: {name, value}
+                                  }
+                                  dispatch(setTableFilters(payload));
                               }}/>
             {error()}
             <Table striped bordered hover size="sm">
