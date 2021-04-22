@@ -3,7 +3,7 @@ import {Alert, Button, Form, Spinner} from "react-bootstrap";
 import React from "react";
 import FormLoader from "../loaders/FormLoader";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {fetchModelAsync, saveModelAsync, selectDataForm} from "../../features/data-form/dataFormSlice";
+import {fetchModelAsync, saveModelAsync, selectDataForm, setNewModel} from "../../features/data-form/dataFormSlice";
 
 export interface DataFormFieldValidation {
     required?: boolean
@@ -101,13 +101,17 @@ const DataForm: React.FC<DataFormProps> = ({
 
     React.useEffect(() => {
         const isNewUser = id === 'create';
-        if (!isNewUser && id) {
+        if (!isNewUser) {
             dispatch(fetchModelAsync({endpoint, id}))
+        } else {
+            dispatch(setNewModel());
         }
     }, [dispatch, endpoint, id]);
 
     React.useEffect(() => {
-        if (dataFormState.currentModel) {
+        const isNewUser = id === 'create';
+
+        if (!isNewUser && dataFormState.currentModel) {
             fields.forEach((field) => {
                 const fieldName: any = field.name;
                 // @ts-ignore
@@ -115,7 +119,7 @@ const DataForm: React.FC<DataFormProps> = ({
                 setValue(fieldName, fieldValue);
             })
         }
-    }, [dataFormState.currentModel, fields, setValue])
+    }, [dataFormState.currentModel, fields, id, setValue])
 
     const getLoadingText = () => {
         return submitButtonText?.saving || 'Loading...';

@@ -94,6 +94,7 @@ export const tableSlice = createSlice({
                 state.totalRecords = action.payload.count;
                 state.nextPage = action.payload.next;
                 state.previousPage = action.payload.previous;
+                state.error = null;
             })
             .addCase(getTableDataListAsync.rejected, (state, action) => {
                 state.loading = false;
@@ -115,7 +116,7 @@ export const tableSlice = createSlice({
     },
 });
 
-export const {setTablePage, setTableFilters} = tableSlice.actions;
+export const {setTablePage, setTableFilters, resetTable} = tableSlice.actions;
 
 export const selectTable = (state: RootState) => state.table;
 

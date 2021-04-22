@@ -36,7 +36,6 @@ export const fetchModelAsync = createAsyncThunk(
 export const saveModelAsync = createAsyncThunk(
     'dataForm/saveModel',
     async ({endpoint, model}: any, thunkAPI) => {
-        console.log('thunk', endpoint, model)
         try {
             const {data} = await saveModel(endpoint, model);
 
@@ -50,7 +49,11 @@ export const saveModelAsync = createAsyncThunk(
 const dataFormSlice = createSlice({
     name: 'dataForm',
     initialState,
-    reducers: {},
+    reducers: {
+        setNewModel: (state) => {
+            state.currentModel = null;
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchModelAsync.pending, (state) => {
@@ -84,6 +87,8 @@ const dataFormSlice = createSlice({
             })
     }
 });
+
+export const {setNewModel} = dataFormSlice.actions;
 
 export const selectDataForm = (state: RootState) => state.dataForm;
 

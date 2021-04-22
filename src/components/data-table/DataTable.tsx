@@ -10,6 +10,7 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks";
 import {
     deleteTableDataItemAsync,
     getTableDataListAsync,
+    resetTable,
     selectTable,
     setTableFilters,
     setTablePage
@@ -66,6 +67,11 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
     const [recordToDelete, setRecordToDelete] = React.useState<DataModel | null>(null);
     const [showRecordDeleted, setShowRecordDeleted] = React.useState<boolean>(false);
     const [numberOfPages, setNumberOfPages] = React.useState(0);
+    const [loaded, setLoaded] = React.useState(false);
+
+    React.useEffect(() => {
+        dispatch(resetTable());
+    }, [dispatch]);
 
     React.useEffect(() => {
         dispatch((getTableDataListAsync({
