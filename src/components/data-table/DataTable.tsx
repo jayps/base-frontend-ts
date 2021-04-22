@@ -116,7 +116,6 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
 
     const deleteRecord = () => {
         if (recordToDelete?.id) {
-            // TODO:
             dispatch(deleteTableDataItemAsync({endpoint, id: recordToDelete.id}))
         }
     }
