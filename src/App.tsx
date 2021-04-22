@@ -14,6 +14,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import UsersList from './pages/users/Index';
 import ManageUserPage from "./pages/users/Manage";
 import RegisterPage from "./pages/register/RegisterPage";
+import GroupsPage from "./pages/groups/Index";
 
 function App() {
     const auth = useAppSelector(selectAuth);
@@ -39,6 +40,8 @@ function App() {
                                     component={ManageUserPage}/>
                     <ProtectedRoute path="/users/create" prevent={!permissions.isStaff} redirect={"/dashboard"}
                                     component={ManageUserPage}/>
+                    <ProtectedRoute path="/groups" prevent={!permissions.isStaff} redirect={"/groups"}
+                                    component={GroupsPage}/>
                     <ProtectedRoute path="/users" prevent={!permissions.isStaff} redirect={"/dashboard"}
                                     component={UsersList}/>
                     <ProtectedRoute path="/login" prevent={token !== undefined && token !== null} redirect={"/dashboard"}

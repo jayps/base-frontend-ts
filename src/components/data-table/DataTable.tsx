@@ -149,7 +149,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
                               }}/>
             {error()}
             <Table striped bordered hover size="sm">
-                <DataTableHeaders columns={columns}/>
+                <DataTableHeaders columns={columns} actions={actions}/>
                 <DataTableBody columns={columns} data={tableState.records} actions={actionButtons}/>
             </Table>
             {

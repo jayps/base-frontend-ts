@@ -102,6 +102,7 @@ const DashboardContainer: React.FC<DashboardContainerProps> = ({children}) => {
                     <ListGroup>
                         {adminMenuItem("/dashboard", "Home", true)}
                         {adminMenuItem("/users", "Users", auth?.currentUser?.isStaff)}
+                        {adminMenuItem("/groups", "Groups", auth?.currentUser?.isStaff)}
                         <ListGroup.Item action>
                             Link 3
                         </ListGroup.Item>

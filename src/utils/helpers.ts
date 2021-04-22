@@ -26,6 +26,9 @@ export const getUserFromToken = (token: string): User => {
 export const makeQueryParams = (obj: any) => {
     let params: any = {};
     Object.keys(obj).forEach((key) => {
+        if (key === 'endpoint') {
+            return;
+        }
         if (Array.isArray(obj[key])) {
             obj[key].forEach((filter: DataTableFilterSetting) => {
                 params[filter.name] = filter.value;
