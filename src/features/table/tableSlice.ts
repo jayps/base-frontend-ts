@@ -76,6 +76,7 @@ export const tableSlice = createSlice({
             }
 
             state.filters = currentFilters;
+            state.currentPage = 1;
         }
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
