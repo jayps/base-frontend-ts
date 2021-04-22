@@ -1,67 +1,24 @@
 import React from "react";
-import {useAppDispatch, useAppSelector} from "../../app/hooks";
-import {deleteUserAsync, getUsersListAsync, selectUsers, setCurrentPage, setUserFilters} from "../../features/users/usersSlice";
 import {User} from "../../models/User";
 import DashboardContainer from "../../components/dashboard-container/DashboardContainer";
-import {Alert, Button, Col, Row} from "react-bootstrap";
-import DataTable, {DataTableFilter, DataTableFilterSetting} from "../../components/data-table/DataTable";
+import {Button, Col, Row} from "react-bootstrap";
+import DataTable, {Column, DataTableActions, DataTableFilter} from "../../components/data-table/DataTable";
 import {Link} from "react-router-dom";
-import ConfirmationDialog from "../../components/dialogs/ConfirmationDialog";
-import InfoDialog from "../../components/dialogs/InfoDialog";
+import {API_URL} from "../../constants";
 
 const UsersList: React.FC = () => {
-    const users = useAppSelector(selectUsers);
-    const dispatch = useAppDispatch();
-    const [confirmDeleteUser, setConfirmDeleteUser] = React.useState(false);
-    const [userToDelete, setUserToDelete] = React.useState<User | null>(null);
-    const [showUserDeleted, setShowUserDeleted] = React.useState<boolean>(false);
-
-    const showConfirmDeleteUser = (user: User) => {
-        setConfirmDeleteUser(true);
-        setUserToDelete(user);
-    }
-
-    const hideConfirmDeleteUser = () => {
-        setConfirmDeleteUser(false);
-    }
-
-    const acknowledgeUserDeleted = () => {
-        setShowUserDeleted(false);
-        fetchUsers();
-    }
-
-    const deleteUser = () => {
-        if (userToDelete?.id) {
-            dispatch(deleteUserAsync(userToDelete.id))
-        }
-    }
-
-    const fetchUsers = () => {
-        dispatch(getUsersListAsync({page: users.currentPage}));
-    }
-
-    const usersTableColumns = [
+    const usersTableColumns: Column[] = [
         {
             title: 'First name',
             key: 'firstName',
-            formatter: (user: User) => (<Link to={`/users/${user.id}/`}>{user.firstName}</Link>)
+            formatter: (user: User) => (<Link to={`/users/${user.id}/`}>{user.firstName}</Link>),
+            isSortable: true
         },
-        {title: 'Last name', key: 'lastName'},
-        {title: 'Email address', key: 'email'},
+        {title: 'Last name', key: 'lastName', isSortable: true},
+        {title: 'Email address', key: 'email', isSortable: true},
         {title: 'Is active', key: 'isActive'},
         {title: 'Is staff', key: 'isStaff'},
         {title: 'Is superuser', key: 'isSuperuser'},
-        {
-            title: 'Actions',
-            key: null,
-            formatter: (user: User) => {
-                return (
-                    <>
-                        <Button variant="link" onClick={() => showConfirmDeleteUser(user)}>Delete</Button>
-                    </>
-                )
-            }
-        }
     ];
 
     const usersTableFilters: DataTableFilter[] = [
@@ -94,27 +51,17 @@ const UsersList: React.FC = () => {
         }
     ];
 
-    React.useEffect(() => {
-        dispatch(getUsersListAsync({page: users.currentPage, filters: users.filters}));
-    }, [dispatch, users.currentPage, users.filters]);
-
-    React.useEffect(() => {
-        if (users.userDeleted && !showUserDeleted) {
-            hideConfirmDeleteUser();
-            setShowUserDeleted(true)
+    const usersTableActions: DataTableActions = {
+        delete: {
+            enabled: true,
         }
-    }, [dispatch, setShowUserDeleted, showUserDeleted, users.userDeleted]);
+    }
 
-    const error = () => {
-        if (!users.loading && users.error) {
-            return (
-                <Alert variant={"danger"}>
-                    {users.error}
-                </Alert>
-            )
-        }
-
-        return null;
+    const usersTableConfig = {
+        endpoint: `${API_URL}/users/`,
+        columns: usersTableColumns,
+        filters: usersTableFilters,
+        actions: usersTableActions
     }
 
     return (
@@ -130,24 +77,7 @@ const UsersList: React.FC = () => {
                 </Col>
             </Row>
 
-            {error()}
-            <DataTable
-                columns={usersTableColumns}
-                data={users.users}
-                loading={users.loading}
-                currentPage={users.currentPage}
-                rowCount={users.totalUsers}
-                onPaginate={(page: number) => dispatch(setCurrentPage(page))}
-                filters={usersTableFilters}
-                currentFilterSettings={users.filters}
-                onFilter={(filter: DataTableFilterSetting) => dispatch(setUserFilters(filter))}
-            />
-            <ConfirmationDialog
-                prompt={"Are you sure you want to delete this user?"}
-                yesButton={{action: deleteUser}}
-                noButton={{action: hideConfirmDeleteUser}}
-                isOpen={confirmDeleteUser}/>
-            <InfoDialog text={"User deleted successfully"} onClose={acknowledgeUserDeleted} isOpen={showUserDeleted}/>
+            <DataTable {...usersTableConfig} />
         </DashboardContainer>
     )
 }

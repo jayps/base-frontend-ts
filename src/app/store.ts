@@ -3,13 +3,15 @@ import counterReducer from '../features/counter/counterSlice';
 import authReducer from '../features/auth/authSlice';
 import userReducer from '../features/users/usersSlice';
 import registerReducer from '../features/register/registerSlice';
+import tableReducer from '../features/table/tableSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     auth: authReducer,
     users: userReducer,
-    register: registerReducer
+    register: registerReducer,
+    table: tableReducer
   },
 });
 

@@ -1,6 +1,7 @@
 import {DataTableFilterSetting} from "../components/data-table/DataTable";
+import {DataModel} from "./DataModel";
 
-export interface User {
+export interface User extends DataModel {
     id?: string;
     email?: string;
     firstName?: string;
