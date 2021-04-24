@@ -2,6 +2,7 @@ import {getAuthHeaders, makeQueryParams} from "../../utils/helpers";
 import {DataModelRequest} from "../../models/Request";
 
 export async function getTableDataList(requestParams: DataModelRequest) {
+    console.log(requestParams)
     let url = `${requestParams.endpoint}?${makeQueryParams(requestParams)}`;
 
     const response = await fetch(url, {

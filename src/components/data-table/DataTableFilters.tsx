@@ -27,6 +27,15 @@ const DataTableFilters: React.FC<DataTableFiltersProps> = ({filters, onChange, c
         return filter.value === filterValue;
     }
 
+    const getFilterValue = (filterName: string) => {
+        const filter = currentFilterSettings.find(f => f.name === filterName);
+        if (!filter) {
+            return undefined;
+        }
+
+        return filter.value;
+    }
+
     return (
         <Card className="mb-5">
             <Card.Header>
@@ -43,12 +52,13 @@ const DataTableFilters: React.FC<DataTableFiltersProps> = ({filters, onChange, c
                                             <Form.Group controlId={filter.name} key={filter.name}>
                                                 <Form.Label>{filter.label}</Form.Label>
                                                 <Form.Control as="select"
-                                                              onChange={(e) => onChange(filter.name, e.target.value)}>
+                                                              onChange={(e) => onChange(filter.name, e.target.value)}
+                                                              value={getFilterValue(filter.name)}
+                                                >
                                                     {
                                                         filter.options.map((option) => (
                                                             <option value={option.value}
                                                                     key={option.value}
-                                                                    selected={isSelected(filter.name, option.value)}
                                                             >{option.label}</option>
                                                         ))
                                                     }

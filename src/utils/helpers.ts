@@ -27,6 +27,7 @@ export const getUserFromToken = (token: string): User => {
 }
 
 export const makeQueryParams = (obj: any) => {
+    console.log('qp', obj)
     let params: any = {};
     Object.keys(obj).forEach((key) => {
         if (key === 'endpoint') {
@@ -37,6 +38,10 @@ export const makeQueryParams = (obj: any) => {
                 params[filter.name] = filter.value;
             });
         } else {
+            console.log(key, params[key])
+            if (obj[key] === undefined || obj[key] === null) {
+                return;
+            }
             params[key] = obj[key];
         }
     });

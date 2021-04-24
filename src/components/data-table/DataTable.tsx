@@ -11,12 +11,14 @@ import {
     deleteTableDataItemAsync, EndpointFilterPayload,
     getTableDataListAsync,
     selectTable,
+    setSearch,
     setTableFilters,
     setTablePage
 } from "../../features/table/tableSlice";
 import ConfirmationDialog from "../dialogs/ConfirmationDialog";
 import {DataModel} from "../../models/DataModel";
 import InfoDialog from "../dialogs/InfoDialog";
+import DataTableSearch from "./DataTableSearch";
 
 export interface Column {
     title: string,
@@ -96,9 +98,10 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
         dispatch((getTableDataListAsync({
             endpoint: endpoint,
             filters: getTableFilters(),
-            page: tableState.currentPage
+            page: tableState.currentPage,
+            search: tableState.search
         })))
-    }, [dispatch, endpoint, getTableFilters, pageLoaded, tableState.currentPage, tableState.filters]);
+    }, [dispatch, endpoint, getTableFilters, pageLoaded, tableState.currentPage, tableState.filters, tableState.search]);
 
     React.useEffect(() => {
         if (tableState.recordDeleted && !showRecordDeleted) {
@@ -168,6 +171,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
 
     return (
         <>
+            <DataTableSearch onSearch={(term: string) => {console.log(term); dispatch(setSearch(term))}} currentSearchParam={tableState.search}/>
             <DataTableFilters filters={filters} currentFilterSettings={getTableFilters()}
                               onChange={(name: string, value: string) => {
                                   const payload: EndpointFilterPayload = {

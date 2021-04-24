@@ -4,6 +4,6 @@ export interface DataModelRequest {
     endpoint: string;
     page?: number;
     filters?: DataTableFilterSetting[];
-    search?: string;
+    search?: string | null;
     sorting?: string;
 }

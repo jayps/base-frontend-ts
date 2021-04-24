@@ -91,6 +91,10 @@ export const tableSlice = createSlice({
 
             state.filters = [...existingFiltersExcludingUpdates, endpointFilters];
             state.currentPage = 1;
+        },
+        setSearch: (state, action) => {
+            state.search = action.payload;
+            state.currentPage = 1;
         }
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -132,7 +136,7 @@ export const tableSlice = createSlice({
     },
 });
 
-export const {setTablePage, setTableFilters} = tableSlice.actions;
+export const {setTablePage, setTableFilters, setSearch} = tableSlice.actions;
 
 export const selectTable = (state: RootState) => state.table;
 
