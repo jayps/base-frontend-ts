@@ -19,6 +19,7 @@ There's still a few things to do on this app:
 - Containerize
 - Maybe add some k8s config, deployment with Helm or similar so that environment variables can be properly managed.
 - Refactor code into smaller components, better for testability.
+- Proper docs on generic components, like the data-table and data-form components. 
 
 ## Available Scripts
 
