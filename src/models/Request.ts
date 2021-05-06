@@ -5,5 +5,5 @@ export interface DataModelRequest {
     page?: number;
     filters?: DataTableFilterSetting[];
     search?: string | null;
-    sorting?: string;
+    ordering?: string;
 }

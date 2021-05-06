@@ -16,14 +16,33 @@ import ManageUserPage from "./pages/users/Manage";
 import RegisterPage from "./pages/register/RegisterPage";
 import GroupsPage from "./pages/groups/Index";
 import ManageGroupPage from "./pages/groups/Manage";
+import {AccessTokenData} from "./models/Auth";
 
 function App() {
     const auth = useAppSelector(selectAuth);
     const dispatch = useAppDispatch();
 
     const token = localStorage.getItem('token');
-    if (token && !auth.token) {
-        dispatch(setToken(JSON.parse(token)));
+    if (token) {
+        if (token) {
+            const parts = token.split('.');
+            if (parts.length > 2) {
+                try {
+                    const decoded = atob(parts[1])
+                    const tokenData: AccessTokenData = JSON.parse(decoded);
+                    const expiry = tokenData.exp * 1000;
+                    if (expiry < Date.now()) {
+                        localStorage.removeItem('token');
+                    }
+                } catch (e) {
+                    localStorage.removeItem('token');
+                }
+            }
+        }
+
+        if (!auth.token) {
+            dispatch(setToken(JSON.parse(token)));
+        }
     }
 
     const permissions: any = {

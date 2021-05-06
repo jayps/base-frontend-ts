@@ -12,9 +12,10 @@ const UsersList: React.FC = () => {
             title: 'First name',
             key: 'firstName',
             formatter: (user: User) => (<Link to={`/users/${user.id}/`}>{user.firstName}</Link>),
-            isSortable: true
+            isSortable: true,
+            sortKey: 'first_name'
         },
-        {title: 'Last name', key: 'lastName', isSortable: true},
+        {title: 'Last name', key: 'lastName', isSortable: true, sortKey: 'last_name'},
         {title: 'Email address', key: 'email', isSortable: true},
         {title: 'Is active', key: 'isActive'},
         {title: 'Is staff', key: 'isStaff'},

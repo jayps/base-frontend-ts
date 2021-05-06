@@ -12,11 +12,12 @@ import {
     getTableDataListAsync,
     selectTable,
     setSearch,
+    setSorting,
     setTableFilters,
-    setTablePage
+    setTablePage, tableSlice
 } from "../../features/table/tableSlice";
 import ConfirmationDialog from "../dialogs/ConfirmationDialog";
-import {DataModel} from "../../models/DataModel";
+import {DataModel, SortSettings} from "../../models/DataModel";
 import InfoDialog from "../dialogs/InfoDialog";
 import DataTableSearch from "./DataTableSearch";
 
@@ -24,7 +25,8 @@ export interface Column {
     title: string,
     key: string | null, // A null key means we'll only display the formatter.
     formatter?: Function,
-    isSortable?: boolean
+    isSortable?: boolean,
+    sortKey?: string // So Django is fun... even though we get camelCase responses, we still need to send snake_case sort keys. This only needs to be specified if different from the key.
 }
 
 // Filter settings to send to APIs
@@ -95,13 +97,16 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
             // If the page has not been set to 1, don't load the table.
             return;
         }
+        // Django sorting is '-column' for desc, 'column' for asc.
+        const orderingDirection = tableState?.sorting?.direction === 'asc' ? '' : '-';
         dispatch((getTableDataListAsync({
             endpoint: endpoint,
             filters: getTableFilters(),
             page: tableState.currentPage,
-            search: tableState.search
+            search: tableState.search,
+            ordering: tableState?.sorting ? `${orderingDirection}${tableState?.sorting?.column}` : undefined
         })))
-    }, [dispatch, endpoint, getTableFilters, pageLoaded, tableState.currentPage, tableState.filters, tableState.search]);
+    }, [dispatch, endpoint, getTableFilters, pageLoaded, tableState.currentPage, tableState.filters, tableState.search, tableState?.sorting]);
 
     React.useEffect(() => {
         if (tableState.recordDeleted && !showRecordDeleted) {
@@ -157,6 +162,19 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
         return actionOutput;
     }
 
+    const onSort = (column: Column) => {
+        if (!column.key) {
+            // If there is no key, we can't sort.
+            return;
+        }
+        let newSortSettings: SortSettings = {column: column.sortKey || column.key, direction: 'asc'};
+        if (newSortSettings.column === tableState?.sorting?.column) {
+            newSortSettings.direction = tableState.sorting.direction === 'asc' ? 'desc' : 'asc';
+        }
+
+        dispatch(setSorting(newSortSettings));
+    }
+
     const error = () => {
         if (!tableState.loading && tableState.error) {
             return (
@@ -171,7 +189,9 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
 
     return (
         <>
-            <DataTableSearch onSearch={(term: string) => {console.log(term); dispatch(setSearch(term))}} currentSearchParam={tableState.search}/>
+            <DataTableSearch onSearch={(term: string) => {
+                dispatch(setSearch(term))
+            }} currentSearchParam={tableState.search}/>
             <DataTableFilters filters={filters} currentFilterSettings={getTableFilters()}
                               onChange={(name: string, value: string) => {
                                   const payload: EndpointFilterPayload = {
@@ -182,7 +202,7 @@ const DataTable: React.FC<DataTableProps> = ({columns, filters, endpoint, action
                               }}/>
             {error()}
             <Table striped bordered hover size="sm">
-                <DataTableHeaders columns={columns} actions={actions}/>
+                <DataTableHeaders columns={columns} actions={actions} onSort={onSort} currentSorting={tableState?.sorting}/>
                 <DataTableBody columns={columns} data={tableState.records} actions={actionButtons}/>
             </Table>
             {

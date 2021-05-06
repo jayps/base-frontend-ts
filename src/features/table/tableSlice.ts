@@ -1,7 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
 import {DataTableFilterSetting} from "../../components/data-table/DataTable";
-import {DataModel} from "../../models/DataModel";
+import {DataModel, SortSettings} from "../../models/DataModel";
 import {DataModelRequest} from "../../models/Request";
 import {deleteTableDataItem, getTableDataList} from "./tableAPI";
 
@@ -24,7 +24,7 @@ export interface TableState {
     currentPage: number;
     filters: EndpointFilters[];
     search?: string | null;
-    sorting?: string | null;
+    sorting?: SortSettings;
     nextPage?: string | null;
     previousPage?: string | null;
     recordDeleted?: boolean;
@@ -95,6 +95,9 @@ export const tableSlice = createSlice({
         setSearch: (state, action) => {
             state.search = action.payload;
             state.currentPage = 1;
+        },
+        setSorting: (state, action) => {
+            state.sorting = action.payload;
         }
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -136,7 +139,7 @@ export const tableSlice = createSlice({
     },
 });
 
-export const {setTablePage, setTableFilters, setSearch} = tableSlice.actions;
+export const {setTablePage, setTableFilters, setSearch, setSorting} = tableSlice.actions;
 
 export const selectTable = (state: RootState) => state.table;
 
