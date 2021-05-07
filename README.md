@@ -10,12 +10,16 @@ Some batteries:
 - Admin pages: Dashboard, User CRUD.
 - Styled components
 - RTK used for redux state management. It's really cool! Check it out [here](https://redux-toolkit.js.org/)
-- JWT Authentication is used for this application.
+- JWT Authentication is used for this application. This does not mean the application is inherently secure from the frontend alone, the API still needs to do security checks.
 
 ## TODO
 There's still a few things to do on this app:
-- Properly handle redirects where administrative permissions are required for some routes.
-- Add functionality to add manage users.
+- Unit tests. 
+- Style it properly. The default bootstrap styles are... Ugly.
+- Containerize
+- Maybe add some k8s config, deployment with Helm or similar so that environment variables can be properly managed.
+- Refactor code into smaller components, better for testability.
+- Proper docs on generic components, like the data-table and data-form components. 
 
 ## Available Scripts
 
